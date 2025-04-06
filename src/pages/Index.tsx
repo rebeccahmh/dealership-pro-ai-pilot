@@ -28,6 +28,7 @@ const Index = () => {
     { name: 'Jun', value: 8 },
   ];
 
+  // Fixed the status property to use the proper string literal types
   const vehicles = [
     {
       id: "v1",
@@ -36,7 +37,7 @@ const Index = () => {
       model: "Camry",
       year: 2023,
       price: 28500,
-      status: "In Stock",
+      status: "In Stock" as const,
       daysInInventory: 15
     },
     {
@@ -46,7 +47,7 @@ const Index = () => {
       model: "Accord",
       year: 2022,
       price: 32000,
-      status: "Reserved",
+      status: "Reserved" as const,
       daysInInventory: 7
     },
     {
@@ -56,7 +57,7 @@ const Index = () => {
       model: "X5",
       year: 2023,
       price: 65000,
-      status: "In Transit",
+      status: "In Transit" as const,
       daysInInventory: 0
     },
     {
@@ -66,7 +67,7 @@ const Index = () => {
       model: "Grand Cherokee",
       year: 2021,
       price: 42000,
-      status: "Sold",
+      status: "Sold" as const,
       daysInInventory: 20
     },
   ];
