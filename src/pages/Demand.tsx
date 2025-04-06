@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Car } from 'lucide-react';
+import { Car, Plus, Upload } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
 import ActionBar from '@/components/ActionBar';
 import EmptyState from '@/components/EmptyState';
@@ -8,9 +8,19 @@ import Navbar from '@/components/Navbar';
 import Sidebar from '@/components/Sidebar';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
+import { useAppContext } from '@/context/AppContext';
 
 const Demand = () => {
   const [activeTab, setActiveTab] = useState('management');
+  const { vehicles } = useAppContext();
+  
+  const handleAddDemand = () => {
+    alert('Add demand entry functionality will be implemented here');
+  };
+
+  const handleImport = () => {
+    alert('Import demand data functionality will be implemented here');
+  };
   
   return (
     <div className="flex h-screen overflow-hidden">
@@ -47,13 +57,39 @@ const Demand = () => {
                 title="Vehicles to clients" 
                 icon={<Car className="h-5 w-5" />}
                 customActions={
-                  <Button variant="ghost" className="bg-autoretech-blue text-white hover:bg-autoretech-blue/90 px-3" size="sm">
-                    By Clients
-                  </Button>
+                  <div className="flex space-x-2 mr-2">
+                    <Button 
+                      variant="ghost" 
+                      className="bg-autoretech-blue text-white hover:bg-autoretech-blue/90 px-3 flex items-center gap-1" 
+                      size="sm"
+                      onClick={handleAddDemand}
+                    >
+                      <Plus className="h-4 w-4" />
+                      Add Entry
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      className="bg-autoretech-blue text-white hover:bg-autoretech-blue/90 px-3 flex items-center gap-1" 
+                      size="sm"
+                      onClick={handleImport}
+                    >
+                      <Upload className="h-4 w-4" />
+                      Import
+                    </Button>
+                    <Button variant="ghost" className="bg-autoretech-blue text-white hover:bg-autoretech-blue/90 px-3" size="sm">
+                      By Clients
+                    </Button>
+                  </div>
                 }
               />
               
-              <EmptyState message="No Entries to Display" />
+              <EmptyState 
+                message="No Entries to Display" 
+                actionLabel="Add Entry"
+                onAction={handleAddDemand}
+                secondaryActionLabel="Import Data"
+                onSecondaryAction={handleImport}
+              />
             </div>
           </div>
         </div>

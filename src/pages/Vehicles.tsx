@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Car } from 'lucide-react';
+import { Car, Plus, Upload } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
 import ActionBar from '@/components/ActionBar';
 import EmptyState from '@/components/EmptyState';
@@ -8,9 +8,25 @@ import Navbar from '@/components/Navbar';
 import Sidebar from '@/components/Sidebar';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useAppContext } from '@/context/AppContext';
+import VehicleTable from '@/components/dashboard/VehicleTable';
 
 const Vehicles = () => {
   const [activeTab, setActiveTab] = useState('warranty');
+  const { vehicles } = useAppContext();
+  
+  // Filter vehicles by warranty (assuming warranty means "In Stock" or "Reserved")
+  const warrantyVehicles = vehicles.filter(v => 
+    v.status === "In Stock" || v.status === "Reserved"
+  );
+  
+  const handleAddVehicle = () => {
+    alert('Add vehicle functionality will be implemented here');
+  };
+
+  const handleImport = () => {
+    alert('Import vehicle data functionality will be implemented here');
+  };
   
   return (
     <div className="flex h-screen overflow-hidden">
@@ -43,12 +59,27 @@ const Vehicles = () => {
               
               <ActionBar 
                 title="Vehicles under Warranty" 
-                count={0}
+                count={warrantyVehicles.length}
                 icon={<Car className="h-5 w-5" />}
                 customActions={
-                  <div className="flex space-x-1 mr-2">
-                    <Button variant="ghost" className="bg-autoretech-blue text-white hover:bg-autoretech-blue/90 px-3" size="sm">
-                      New Vehicles
+                  <div className="flex space-x-2 mr-2">
+                    <Button 
+                      variant="ghost" 
+                      className="bg-autoretech-blue text-white hover:bg-autoretech-blue/90 px-3 flex items-center gap-1" 
+                      size="sm"
+                      onClick={handleAddVehicle}
+                    >
+                      <Plus className="h-4 w-4" />
+                      New Vehicle
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      className="bg-autoretech-blue text-white hover:bg-autoretech-blue/90 px-3 flex items-center gap-1" 
+                      size="sm"
+                      onClick={handleImport}
+                    >
+                      <Upload className="h-4 w-4" />
+                      Import
                     </Button>
                     <Button variant="ghost" className="bg-autoretech-blue text-white hover:bg-autoretech-blue/90 px-3" size="sm">
                       In Prep
@@ -63,7 +94,37 @@ const Vehicles = () => {
                 }
               />
               
-              <EmptyState message="There are no vehicle records to display" />
+              {activeTab === 'warranty' ? (
+                warrantyVehicles.length > 0 ? (
+                  <VehicleTable 
+                    title="Vehicles under Warranty"
+                    vehicles={warrantyVehicles}
+                  />
+                ) : (
+                  <EmptyState 
+                    message="There are no vehicle records to display" 
+                    actionLabel="Add Vehicle"
+                    onAction={handleAddVehicle}
+                    secondaryActionLabel="Import Vehicles"
+                    onSecondaryAction={handleImport}
+                  />
+                )
+              ) : (
+                vehicles.length > 0 ? (
+                  <VehicleTable 
+                    title="All Vehicles"
+                    vehicles={vehicles}
+                  />
+                ) : (
+                  <EmptyState 
+                    message="There are no vehicle records to display" 
+                    actionLabel="Add Vehicle"
+                    onAction={handleAddVehicle}
+                    secondaryActionLabel="Import Vehicles"
+                    onSecondaryAction={handleImport}
+                  />
+                )
+              )}
             </div>
           </div>
         </div>

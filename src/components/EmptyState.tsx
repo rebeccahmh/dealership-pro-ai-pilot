@@ -24,7 +24,9 @@ const EmptyState = ({
       {(actionLabel || secondaryActionLabel) && (
         <div className="flex gap-4 mt-2">
           {actionLabel && onAction && (
-            <Button onClick={onAction}>{actionLabel}</Button>
+            <Button onClick={onAction} className="bg-autoretech-blue hover:bg-autoretech-blue/90">
+              {actionLabel}
+            </Button>
           )}
           {secondaryActionLabel && onSecondaryAction && (
             <Button variant="outline" onClick={onSecondaryAction}>

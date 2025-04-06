@@ -7,70 +7,16 @@ import { StatCard } from "@/components/dashboard/StatCard";
 import PerformanceChart from "@/components/dashboard/PerformanceChart";
 import VehicleTable from "@/components/dashboard/VehicleTable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useAppContext } from "@/context/AppContext";
 
 const Index = () => {
-  // Mock data - in a real application, this would come from an API
-  const dealershipPerformanceData = [
-    { name: 'Jan', value: 12 },
-    { name: 'Feb', value: 19 },
-    { name: 'Mar', value: 15 },
-    { name: 'Apr', value: 26 },
-    { name: 'May', value: 18 },
-    { name: 'Jun', value: 22 },
-  ];
+  const { vehicles, dealershipPerformanceData, myPerformanceData } = useAppContext();
   
-  const myPerformanceData = [
-    { name: 'Jan', value: 4 },
-    { name: 'Feb', value: 7 },
-    { name: 'Mar', value: 5 },
-    { name: 'Apr', value: 9 },
-    { name: 'May', value: 6 },
-    { name: 'Jun', value: 8 },
-  ];
-
-  // Fixed the status property to use the proper string literal types
-  const vehicles = [
-    {
-      id: "v1",
-      vin: "1HGCM82633A123456",
-      make: "Toyota",
-      model: "Camry",
-      year: 2023,
-      price: 28500,
-      status: "In Stock" as const,
-      daysInInventory: 15
-    },
-    {
-      id: "v2",
-      vin: "2T1KR32E13C123123",
-      make: "Honda",
-      model: "Accord",
-      year: 2022,
-      price: 32000,
-      status: "Reserved" as const,
-      daysInInventory: 7
-    },
-    {
-      id: "v3",
-      vin: "5UXWX7C50CL123456",
-      make: "BMW",
-      model: "X5",
-      year: 2023,
-      price: 65000,
-      status: "In Transit" as const,
-      daysInInventory: 0
-    },
-    {
-      id: "v4",
-      vin: "1C4RJFAG2FC123789",
-      make: "Jeep",
-      model: "Grand Cherokee",
-      year: 2021,
-      price: 42000,
-      status: "Sold" as const,
-      daysInInventory: 20
-    },
-  ];
+  // Calculate stats based on actual data
+  const totalVehicles = vehicles.length;
+  const availableVehicles = vehicles.filter(v => v.status === "In Stock").length;
+  const totalCustomers = 2453; // Example static value since we don't have all customers in context
+  const monthlySales = "$328,500"; // Example static value
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -85,7 +31,7 @@ const Index = () => {
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
               <StatCard 
                 title="Total Vehicles"
-                value="124"
+                value={totalVehicles.toString()}
                 description="vehicles in inventory"
                 icon={Car}
                 iconColor="text-autoretech-blue"
@@ -94,14 +40,14 @@ const Index = () => {
               />
               <StatCard 
                 title="Available Vehicles"
-                value="98"
+                value={availableVehicles.toString()}
                 description="ready for sale"
                 icon={Car}
                 iconColor="text-autoretech-pink"
               />
               <StatCard 
                 title="Total Customers"
-                value="2,453"
+                value={totalCustomers.toLocaleString()}
                 description="registered customers"
                 icon={Users}
                 iconColor="text-autoretech-yellow"
@@ -110,7 +56,7 @@ const Index = () => {
               />
               <StatCard 
                 title="Monthly Sales"
-                value="$328,500"
+                value={monthlySales}
                 description="in June 2025"
                 icon={DollarSign}
                 iconColor="text-green-600"

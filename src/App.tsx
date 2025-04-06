@@ -12,6 +12,7 @@ import Demand from "./pages/Demand";
 import Marketing from "./pages/Marketing";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
+import { AppProvider } from "./context/AppContext";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -24,22 +25,24 @@ const queryClient = new QueryClient({
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/vehicles" element={<Vehicles />} />
-          <Route path="/customers" element={<Customers />} />
-          <Route path="/transactions" element={<Transactions />} />
-          <Route path="/demand" element={<Demand />} />
-          <Route path="/marketing" element={<Marketing />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+    <AppProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/vehicles" element={<Vehicles />} />
+            <Route path="/customers" element={<Customers />} />
+            <Route path="/transactions" element={<Transactions />} />
+            <Route path="/demand" element={<Demand />} />
+            <Route path="/marketing" element={<Marketing />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </AppProvider>
   </QueryClientProvider>
 );
 
