@@ -56,6 +56,27 @@ const Vehicles = () => {
       description: "Showing available vehicles",
     });
   };
+
+  const handleEmail = () => {
+    toast({
+      title: "Email Vehicles",
+      description: "Sending vehicles data via email",
+    });
+  };
+
+  const handleExport = () => {
+    toast({
+      title: "Export Vehicles",
+      description: "Exporting vehicles data",
+    });
+  };
+
+  const handlePrint = () => {
+    toast({
+      title: "Print Vehicles",
+      description: "Printing vehicles list",
+    });
+  };
   
   return (
     <div className="flex h-screen overflow-hidden">
@@ -136,18 +157,9 @@ const Vehicles = () => {
                     </Button>
                   </div>
                 }
-                onEmail={() => toast({
-                  title: "Email Vehicles",
-                  description: "Sending vehicles data via email",
-                })}
-                onExport={() => toast({
-                  title: "Export Vehicles",
-                  description: "Exporting vehicles data",
-                })}
-                onPrint={() => toast({
-                  title: "Print Vehicles",
-                  description: "Printing vehicles list",
-                })}
+                onEmail={handleEmail}
+                onExport={handleExport}
+                onPrint={handlePrint}
               />
               
               {activeTab === 'warranty' ? (

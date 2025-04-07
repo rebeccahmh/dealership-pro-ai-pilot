@@ -36,6 +36,27 @@ const Demand = () => {
       description: "Showing demand data organized by clients",
     });
   };
+
+  const handleEmail = () => {
+    toast({
+      title: "Email Demand Data",
+      description: "Sending demand data via email",
+    });
+  };
+
+  const handleExport = () => {
+    toast({
+      title: "Export Demand Data",
+      description: "Exporting demand data",
+    });
+  };
+
+  const handlePrint = () => {
+    toast({
+      title: "Print Demand Data",
+      description: "Printing demand data",
+    });
+  };
   
   return (
     <div className="flex h-screen overflow-hidden">
@@ -101,18 +122,9 @@ const Demand = () => {
                     </Button>
                   </div>
                 }
-                onEmail={() => toast({
-                  title: "Email Demand Data",
-                  description: "Sending demand data via email",
-                })}
-                onExport={() => toast({
-                  title: "Export Demand Data",
-                  description: "Exporting demand data",
-                })}
-                onPrint={() => toast({
-                  title: "Print Demand Data",
-                  description: "Printing demand data",
-                })}
+                onEmail={handleEmail}
+                onExport={handleExport}
+                onPrint={handlePrint}
               />
               
               <EmptyState 
