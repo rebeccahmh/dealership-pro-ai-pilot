@@ -10,16 +10,24 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 import EmptyState from '@/components/EmptyState';
 import { useAppContext } from '@/context/AppContext';
+import { useToast } from '@/hooks/use-toast';
 
 const Customers = () => {
   const { customers } = useAppContext();
+  const { toast } = useToast();
   
   const handleAddCustomer = () => {
-    alert('Add customer functionality will be implemented here');
+    toast({
+      title: "Add Customer",
+      description: "The add customer functionality will be implemented here",
+    });
   };
 
   const handleImportCustomers = () => {
-    alert('Import customers functionality will be implemented here');
+    toast({
+      title: "Import Customers",
+      description: "The import customers functionality will be implemented here",
+    });
   };
   
   return (
@@ -58,6 +66,18 @@ const Customers = () => {
                     </Button>
                   </div>
                 }
+                onEmail={() => toast({
+                  title: "Email Customers",
+                  description: "Sending customers data via email",
+                })}
+                onExport={() => toast({
+                  title: "Export Customers",
+                  description: "Exporting customers data",
+                })}
+                onPrint={() => toast({
+                  title: "Print Customers",
+                  description: "Printing customers list",
+                })}
               />
               
               {customers.length > 0 ? (

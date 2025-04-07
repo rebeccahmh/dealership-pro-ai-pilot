@@ -11,16 +11,24 @@ import { useAppContext } from '@/context/AppContext';
 import { Card } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
+import { useToast } from '@/hooks/use-toast';
 
 const Transactions = () => {
   const { transactions } = useAppContext();
+  const { toast } = useToast();
   
   const handleAddTransaction = () => {
-    alert('Add transaction functionality will be implemented here');
+    toast({
+      title: "Add Transaction",
+      description: "The add transaction functionality will be implemented here",
+    });
   };
 
   const handleImport = () => {
-    alert('Import transactions functionality will be implemented here');
+    toast({
+      title: "Import Transactions",
+      description: "The import transactions functionality will be implemented here",
+    });
   };
   
   const getStatusColor = (status: string) => {
@@ -72,6 +80,18 @@ const Transactions = () => {
                     </Button>
                   </div>
                 }
+                onEmail={() => toast({
+                  title: "Email Transactions",
+                  description: "Sending transactions data via email",
+                })}
+                onExport={() => toast({
+                  title: "Export Transactions",
+                  description: "Exporting transactions data",
+                })}
+                onPrint={() => toast({
+                  title: "Print Transactions",
+                  description: "Printing transactions list",
+                })}
               />
               
               {transactions.length > 0 ? (

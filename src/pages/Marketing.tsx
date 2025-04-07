@@ -95,6 +95,27 @@ const Marketing = () => {
       setFile(e.target.files[0]);
     }
   };
+
+  const handleEmail = () => {
+    toast({
+      title: "Email Marketing Campaigns",
+      description: "Sending marketing campaigns via email",
+    });
+  };
+
+  const handleExport = () => {
+    toast({
+      title: "Export Marketing Campaigns",
+      description: "Exporting marketing campaigns data",
+    });
+  };
+
+  const handlePrint = () => {
+    toast({
+      title: "Print Marketing Campaigns",
+      description: "Printing marketing campaigns",
+    });
+  };
   
   return (
     <div className="flex h-screen overflow-hidden">
@@ -139,6 +160,9 @@ const Marketing = () => {
                     </Button>
                   </div>
                 }
+                onEmail={handleEmail}
+                onExport={handleExport}
+                onPrint={handlePrint}
               />
               
               <EmptyState 

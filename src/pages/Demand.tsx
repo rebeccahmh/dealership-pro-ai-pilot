@@ -9,17 +9,32 @@ import Sidebar from '@/components/Sidebar';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { useAppContext } from '@/context/AppContext';
+import { useToast } from '@/hooks/use-toast';
 
 const Demand = () => {
   const [activeTab, setActiveTab] = useState('management');
   const { vehicles } = useAppContext();
+  const { toast } = useToast();
   
   const handleAddDemand = () => {
-    alert('Add demand entry functionality will be implemented here');
+    toast({
+      title: "Add Demand Entry",
+      description: "The add demand entry functionality will be implemented here",
+    });
   };
 
   const handleImport = () => {
-    alert('Import demand data functionality will be implemented here');
+    toast({
+      title: "Import Demand Data",
+      description: "The import demand data functionality will be implemented here",
+    });
+  };
+
+  const handleByClients = () => {
+    toast({
+      title: "By Clients",
+      description: "Showing demand data organized by clients",
+    });
   };
   
   return (
@@ -76,11 +91,28 @@ const Demand = () => {
                       <Upload className="h-4 w-4" />
                       Import
                     </Button>
-                    <Button variant="ghost" className="bg-autoretech-blue text-white hover:bg-autoretech-blue/90 px-3" size="sm">
+                    <Button 
+                      variant="ghost" 
+                      className="bg-autoretech-blue text-white hover:bg-autoretech-blue/90 px-3" 
+                      size="sm"
+                      onClick={handleByClients}
+                    >
                       By Clients
                     </Button>
                   </div>
                 }
+                onEmail={() => toast({
+                  title: "Email Demand Data",
+                  description: "Sending demand data via email",
+                })}
+                onExport={() => toast({
+                  title: "Export Demand Data",
+                  description: "Exporting demand data",
+                })}
+                onPrint={() => toast({
+                  title: "Print Demand Data",
+                  description: "Printing demand data",
+                })}
               />
               
               <EmptyState 

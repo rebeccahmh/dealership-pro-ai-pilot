@@ -10,10 +10,12 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAppContext } from '@/context/AppContext';
 import VehicleTable from '@/components/dashboard/VehicleTable';
+import { useToast } from '@/hooks/use-toast';
 
 const Vehicles = () => {
   const [activeTab, setActiveTab] = useState('warranty');
   const { vehicles } = useAppContext();
+  const { toast } = useToast();
   
   // Filter vehicles by warranty (assuming warranty means "In Stock" or "Reserved")
   const warrantyVehicles = vehicles.filter(v => 
@@ -21,11 +23,38 @@ const Vehicles = () => {
   );
   
   const handleAddVehicle = () => {
-    alert('Add vehicle functionality will be implemented here');
+    toast({
+      title: "Add Vehicle",
+      description: "The add vehicle functionality will be implemented here",
+    });
   };
 
   const handleImport = () => {
-    alert('Import vehicle data functionality will be implemented here');
+    toast({
+      title: "Import Vehicles",
+      description: "The import vehicle data functionality will be implemented here",
+    });
+  };
+
+  const handleInPrep = () => {
+    toast({
+      title: "In Prep Filter",
+      description: "Filtering vehicles in preparation",
+    });
+  };
+
+  const handleArchive = () => {
+    toast({
+      title: "Archive Filter",
+      description: "Showing archived vehicles",
+    });
+  };
+
+  const handleAvailable = () => {
+    toast({
+      title: "Available Filter",
+      description: "Showing available vehicles",
+    });
   };
   
   return (
@@ -81,17 +110,44 @@ const Vehicles = () => {
                       <Upload className="h-4 w-4" />
                       Import
                     </Button>
-                    <Button variant="ghost" className="bg-autoretech-blue text-white hover:bg-autoretech-blue/90 px-3" size="sm">
+                    <Button 
+                      variant="ghost" 
+                      className="bg-autoretech-blue text-white hover:bg-autoretech-blue/90 px-3" 
+                      size="sm"
+                      onClick={handleInPrep}
+                    >
                       In Prep
                     </Button>
-                    <Button variant="ghost" className="bg-autoretech-blue text-white hover:bg-autoretech-blue/90 px-3" size="sm">
+                    <Button 
+                      variant="ghost" 
+                      className="bg-autoretech-blue text-white hover:bg-autoretech-blue/90 px-3" 
+                      size="sm"
+                      onClick={handleArchive}
+                    >
                       Archive
                     </Button>
-                    <Button variant="ghost" className="bg-autoretech-blue text-white hover:bg-autoretech-blue/90 px-3" size="sm">
+                    <Button 
+                      variant="ghost" 
+                      className="bg-autoretech-blue text-white hover:bg-autoretech-blue/90 px-3" 
+                      size="sm"
+                      onClick={handleAvailable}
+                    >
                       Available
                     </Button>
                   </div>
                 }
+                onEmail={() => toast({
+                  title: "Email Vehicles",
+                  description: "Sending vehicles data via email",
+                })}
+                onExport={() => toast({
+                  title: "Export Vehicles",
+                  description: "Exporting vehicles data",
+                })}
+                onPrint={() => toast({
+                  title: "Print Vehicles",
+                  description: "Printing vehicles list",
+                })}
               />
               
               {activeTab === 'warranty' ? (
