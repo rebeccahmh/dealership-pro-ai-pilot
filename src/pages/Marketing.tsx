@@ -1,18 +1,17 @@
-
 import React, { useState } from 'react';
-import { BarChartBig, Plus, Upload, FileText, X } from 'lucide-react';
+import { BarChartBig, Plus, Upload, FileText, X, Sparkles } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
 import ActionBar from '@/components/ActionBar';
 import EmptyState from '@/components/EmptyState';
 import Navbar from '@/components/Navbar';
 import Sidebar from '@/components/Sidebar';
 import { Button } from '@/components/ui/button';
-import { useAppContext } from '@/context/AppContext';
 import { useToast } from '@/hooks/use-toast';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import AIAdGenerator from '@/components/marketing/AIAdGenerator';
 import {
   Drawer,
   DrawerClose,
@@ -38,6 +37,7 @@ const Marketing = () => {
   const [emailSubject, setEmailSubject] = useState('');
   const [emailBody, setEmailBody] = useState('');
   const [exportFormat, setExportFormat] = useState('');
+  const [showAdGenerator, setShowAdGenerator] = useState(true);
 
   const handleAddCampaign = () => {
     setOpenAddDrawer(true);
@@ -162,6 +162,10 @@ const Marketing = () => {
     }
   };
   
+  const toggleAdGenerator = () => {
+    setShowAdGenerator(!showAdGenerator);
+  };
+  
   return (
     <div className="flex h-screen overflow-hidden">
       <Sidebar />
@@ -201,6 +205,15 @@ const Marketing = () => {
                     </Button>
                     <Button 
                       variant="blue"
+                      className="flex items-center gap-1"
+                      size="sm"
+                      onClick={toggleAdGenerator}
+                    >
+                      <Sparkles className="h-4 w-4" />
+                      {showAdGenerator ? "Hide AI Generator" : "Show AI Generator"}
+                    </Button>
+                    <Button 
+                      variant="blue"
                       size="sm"
                       onClick={handlePublish}
                     >
@@ -210,8 +223,14 @@ const Marketing = () => {
                 }
               />
               
+              {showAdGenerator && (
+                <div className="mb-6">
+                  <AIAdGenerator />
+                </div>
+              )}
+              
               <EmptyState 
-                message="There are no marketing records to display" 
+                message="There are no marketing campaigns to display" 
                 actionLabel="Create Campaign"
                 onAction={handleAddCampaign}
                 secondaryActionLabel="Import Data"
