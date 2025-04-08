@@ -78,25 +78,36 @@ const Navbar = () => {
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="bg-white z-50">
+          <DropdownMenuContent align="end" className="bg-white z-[100] shadow-lg" sideOffset={5}>
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem 
-              onClick={handleProfileClick} 
-              className="cursor-pointer hover:bg-gray-100"
+              onSelect={(e) => {
+                e.preventDefault();
+                handleProfileClick();
+              }}
+              className="cursor-pointer hover:bg-gray-100 focus:bg-gray-100"
             >
+              <User className="mr-2 h-4 w-4" />
               Profile
             </DropdownMenuItem>
             <DropdownMenuItem 
-              onClick={handleSettingsClick} 
-              className="cursor-pointer hover:bg-gray-100"
+              onSelect={(e) => {
+                e.preventDefault();
+                handleSettingsClick();
+              }}
+              className="cursor-pointer hover:bg-gray-100 focus:bg-gray-100"
             >
+              <Settings className="mr-2 h-4 w-4" />
               Settings
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem 
-              onClick={handleLogout} 
-              className="cursor-pointer hover:bg-gray-100"
+              onSelect={(e) => {
+                e.preventDefault();
+                handleLogout();
+              }}
+              className="cursor-pointer hover:bg-gray-100 focus:bg-gray-100"
             >
               Log out
             </DropdownMenuItem>
