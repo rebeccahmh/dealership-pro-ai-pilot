@@ -1,5 +1,5 @@
 
-import React, { createContext, useContext, ReactNode } from 'react';
+import React, { createContext, useContext, ReactNode, useState } from 'react';
 
 // Define the shared data structures
 export interface Vehicle {
@@ -41,123 +41,85 @@ export interface PerformanceData {
 
 interface AppContextType {
   vehicles: Vehicle[];
+  addVehicle: (vehicle: Vehicle) => void;
   customers: Customer[];
+  addCustomer: (customer: Customer) => void;
   transactions: Transaction[];
+  addTransaction: (transaction: Transaction) => void;
   dealershipPerformanceData: PerformanceData[];
+  updateDealershipPerformance: (data: PerformanceData[]) => void;
   myPerformanceData: PerformanceData[];
+  updateMyPerformance: (data: PerformanceData[]) => void;
 }
 
-// Create the initial shared data
-const appData: AppContextType = {
-  vehicles: [
-    {
-      id: "v1",
-      vin: "1HGCM82633A123456",
-      make: "Toyota",
-      model: "Camry",
-      year: 2023,
-      price: 28500,
-      status: "In Stock",
-      daysInInventory: 15
-    },
-    {
-      id: "v2",
-      vin: "2T1KR32E13C123123",
-      make: "Honda",
-      model: "Accord",
-      year: 2022,
-      price: 32000,
-      status: "Reserved",
-      daysInInventory: 7
-    },
-    {
-      id: "v3",
-      vin: "5UXWX7C50CL123456",
-      make: "BMW",
-      model: "X5",
-      year: 2023,
-      price: 65000,
-      status: "In Transit",
-      daysInInventory: 0
-    },
-    {
-      id: "v4",
-      vin: "1C4RJFAG2FC123789",
-      make: "Jeep",
-      model: "Grand Cherokee",
-      year: 2021,
-      price: 42000,
-      status: "Sold",
-      daysInInventory: 20
-    },
-  ],
-  customers: [
-    {
-      id: "c1",
-      entryNumber: "1",
-      name: "Ted's Dealership",
-      uid: "58658697",
-      type: "Private Company",
-      mobile: "+1 (555) 123-4567",
-      phone: "+1 (555) 765-4321",
-      email: "contact@tedsdealership.com",
-      city: "Austin"
-    },
-    {
-      id: "c2",
-      entryNumber: "2",
-      name: "Sarah Johnson",
-      uid: "12345678",
-      type: "Individual",
-      mobile: "+1 (555) 987-6543",
-      phone: "+1 (555) 321-0987",
-      email: "sarah.j@example.com",
-      city: "Dallas"
-    },
-  ],
-  transactions: [
-    {
-      id: "t1",
-      date: "2025-03-15",
-      customer: "Ted's Dealership",
-      vehicle: "Honda Accord 2022",
-      amount: 32000,
-      status: "Completed"
-    },
-    {
-      id: "t2",
-      date: "2025-03-28",
-      customer: "Sarah Johnson",
-      vehicle: "Jeep Grand Cherokee 2021",
-      amount: 42000,
-      status: "Completed"
-    },
-  ],
-  dealershipPerformanceData: [
-    { name: 'Jan', value: 12 },
-    { name: 'Feb', value: 19 },
-    { name: 'Mar', value: 15 },
-    { name: 'Apr', value: 26 },
-    { name: 'May', value: 18 },
-    { name: 'Jun', value: 22 },
-  ],
-  myPerformanceData: [
-    { name: 'Jan', value: 4 },
-    { name: 'Feb', value: 7 },
-    { name: 'Mar', value: 5 },
-    { name: 'Apr', value: 9 },
-    { name: 'May', value: 6 },
-    { name: 'Jun', value: 8 },
-  ]
-};
+// Create the initial empty states
+const initialVehicles: Vehicle[] = [];
+const initialCustomers: Customer[] = [];
+const initialTransactions: Transaction[] = [];
+const initialPerformanceData: PerformanceData[] = [
+  { name: 'Jan', value: 0 },
+  { name: 'Feb', value: 0 },
+  { name: 'Mar', value: 0 },
+  { name: 'Apr', value: 0 },
+  { name: 'May', value: 0 },
+  { name: 'Jun', value: 0 },
+];
 
-// Create the context
-const AppContext = createContext<AppContextType>(appData);
+// Create the context with initial empty values and state updaters
+const AppContext = createContext<AppContextType>({
+  vehicles: initialVehicles,
+  addVehicle: () => {},
+  customers: initialCustomers,
+  addCustomer: () => {},
+  transactions: initialTransactions,
+  addTransaction: () => {},
+  dealershipPerformanceData: initialPerformanceData,
+  updateDealershipPerformance: () => {},
+  myPerformanceData: initialPerformanceData,
+  updateMyPerformance: () => {},
+});
 
-// Create a provider component
+// Create a provider component with state management
 export const AppProvider = ({ children }: { children: ReactNode }) => {
+  const [vehicles, setVehicles] = useState<Vehicle[]>(initialVehicles);
+  const [customers, setCustomers] = useState<Customer[]>(initialCustomers);
+  const [transactions, setTransactions] = useState<Transaction[]>(initialTransactions);
+  const [dealershipPerformanceData, setDealershipPerformanceData] = useState<PerformanceData[]>(initialPerformanceData);
+  const [myPerformanceData, setMyPerformanceData] = useState<PerformanceData[]>(initialPerformanceData);
+
+  const addVehicle = (vehicle: Vehicle) => {
+    setVehicles(prev => [...prev, vehicle]);
+  };
+
+  const addCustomer = (customer: Customer) => {
+    setCustomers(prev => [...prev, customer]);
+  };
+
+  const addTransaction = (transaction: Transaction) => {
+    setTransactions(prev => [...prev, transaction]);
+  };
+
+  const updateDealershipPerformance = (data: PerformanceData[]) => {
+    setDealershipPerformanceData(data);
+  };
+
+  const updateMyPerformance = (data: PerformanceData[]) => {
+    setMyPerformanceData(data);
+  };
+
   return (
-    <AppContext.Provider value={appData}>
+    <AppContext.Provider value={{
+      vehicles,
+      addVehicle,
+      customers,
+      addCustomer,
+      transactions,
+      addTransaction,
+      dealershipPerformanceData,
+      updateDealershipPerformance,
+      myPerformanceData,
+      updateMyPerformance
+    }}>
       {children}
     </AppContext.Provider>
   );

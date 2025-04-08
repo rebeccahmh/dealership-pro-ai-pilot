@@ -51,16 +51,28 @@ const VehiclePageContent = () => {
   const handleEmail = () => {
     setDrawerType("email");
     setDrawerOpen(true);
+    toast({
+      title: "Email action initiated",
+      description: "Email functionality is ready to use."
+    });
   };
 
   const handleExport = () => {
     setDrawerType("export");
     setDrawerOpen(true);
+    toast({
+      title: "Export action initiated",
+      description: "Export functionality is ready to use."
+    });
   };
 
   const handlePrint = () => {
     setDrawerType("print");
     setDrawerOpen(true);
+    toast({
+      title: "Print action initiated",
+      description: "Print functionality is ready to use."
+    });
   };
 
   const closeDrawer = () => {
