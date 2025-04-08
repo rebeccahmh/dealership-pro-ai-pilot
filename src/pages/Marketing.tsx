@@ -130,6 +130,7 @@ const Marketing = () => {
               <ActionBar 
                 title="Marketing" 
                 icon={<BarChartBig className="h-5 w-5" />}
+                pageName="marketing"
                 customActions={
                   <div className="flex space-x-2 mr-2">
                     <Button 
@@ -160,9 +161,6 @@ const Marketing = () => {
                     </Button>
                   </div>
                 }
-                onEmail={handleEmail}
-                onExport={handleExport}
-                onPrint={handlePrint}
               />
               
               <EmptyState 
