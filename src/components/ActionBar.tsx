@@ -1,3 +1,4 @@
+
 import React, { ReactNode, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { X, Mail, Printer, Download, Archive } from 'lucide-react';
@@ -27,7 +28,7 @@ const ActionBar = ({
   pageName = 'vehicles'
 }: ActionBarProps) => {
   const { toast } = useToast();
-  const [openDrawer, setOpenDrawer] = useState<string | null>(null);
+  // We're no longer using openDrawer state here since it's now handled in parent components
   
   const handleClose = () => {
     if (onClose) {
@@ -41,124 +42,31 @@ const ActionBar = ({
   };
   
   const handleEmail = () => {
-    if (pageName === 'vehicles') {
-      setOpenDrawer('email');
-    } else if (pageName === 'customers') {
-      setOpenDrawer('email');
-    } else if (pageName === 'transactions') {
-      setOpenDrawer('email');
-    } else if (pageName === 'demand') {
-      setOpenDrawer('email');
-    } else if (pageName === 'marketing') {
-      setOpenDrawer('email');
-    } else {
-      toast({
-        title: "Email Action",
-        description: "Email button clicked",
-      });
-    }
+    toast({
+      title: `${pageName} - Email Action`,
+      description: "Email button clicked",
+    });
   };
   
   const handleExport = () => {
-    if (pageName === 'vehicles') {
-      setOpenDrawer('export');
-    } else if (pageName === 'customers') {
-      setOpenDrawer('export');
-    } else if (pageName === 'transactions') {
-      setOpenDrawer('export');
-    } else if (pageName === 'demand') {
-      setOpenDrawer('export');
-    } else if (pageName === 'marketing') {
-      setOpenDrawer('export');
-    } else {
-      toast({
-        title: "Export Action",
-        description: "Export button clicked",
-      });
-    }
+    toast({
+      title: `${pageName} - Export Action`,
+      description: "Export button clicked",
+    });
   };
   
   const handlePrint = () => {
-    if (pageName === 'vehicles') {
-      setOpenDrawer('print');
-    } else if (pageName === 'customers') {
-      setOpenDrawer('print');
-    } else if (pageName === 'transactions') {
-      setOpenDrawer('print');
-    } else if (pageName === 'demand') {
-      setOpenDrawer('print');
-    } else if (pageName === 'marketing') {
-      setOpenDrawer('print');
-    } else {
-      toast({
-        title: "Print Action",
-        description: "Print button clicked",
-      });
-    }
+    toast({
+      title: `${pageName} - Print Action`,
+      description: "Print button clicked",
+    });
   };
   
   const handleArchive = () => {
-    if (pageName === 'vehicles') {
-      setOpenDrawer('archive');
-    } else if (pageName === 'customers') {
-      setOpenDrawer('archive');
-    } else if (pageName === 'transactions') {
-      setOpenDrawer('archive');
-    } else if (pageName === 'demand') {
-      setOpenDrawer('archive');
-    } else {
-      toast({
-        title: "Archive Action",
-        description: "Archive button clicked",
-      });
-    }
-  };
-
-  const handleNewVehicle = () => {
-    setOpenDrawer('new');
-  };
-
-  const handleImport = () => {
-    if (pageName === 'vehicles') {
-      setOpenDrawer('import');
-    } else if (pageName === 'customers') {
-      setOpenDrawer('import');
-    } else {
-      toast({
-        title: "Import Action",
-        description: "Import button clicked",
-      });
-    }
-  };
-
-  const handleInPrep = () => {
-    if (pageName === 'vehicles') {
-      setOpenDrawer('prep');
-    } else {
-      toast({
-        title: "In Prep Action",
-        description: "In Prep button clicked",
-      });
-    }
-  };
-
-  const handleAvailable = () => {
-    if (pageName === 'vehicles') {
-      setOpenDrawer('available');
-    } else {
-      toast({
-        title: "Available Action",
-        description: "Available button clicked",
-      });
-    }
-  };
-
-  const handleAddCustomer = () => {
-    setOpenDrawer('add');
-  };
-  
-  const closeDrawer = () => {
-    setOpenDrawer(null);
+    toast({
+      title: `${pageName} - Archive Action`,
+      description: "Archive button clicked",
+    });
   };
   
   return (
@@ -169,14 +77,7 @@ const ActionBar = ({
       </div>
       
       <div className="flex items-center space-x-1">
-        {customActions && React.cloneElement(customActions as React.ReactElement, {
-          handleNewVehicle,
-          handleImport,
-          handleInPrep,
-          handleArchive,
-          handleAvailable,
-          handleAddCustomer
-        })}
+        {customActions}
         
         <div className="bg-autoretech-blue text-white rounded-full flex items-center">
           {actions.includes('archive') && (
@@ -239,42 +140,6 @@ const ActionBar = ({
           )}
         </div>
       </div>
-
-      {/* Vehicle-specific drawers */}
-      {pageName === 'vehicles' && (
-        <VehicleDrawer 
-          isOpen={openDrawer !== null}
-          onClose={closeDrawer}
-          drawerType={openDrawer as any || 'new'}
-        />
-      )}
-
-      {/* Customer-specific drawers */}
-      {pageName === 'customers' && (
-        <CustomerDrawer 
-          isOpen={openDrawer !== null}
-          onClose={closeDrawer}
-          drawerType={openDrawer as any || 'add'}
-        />
-      )}
-
-      {/* Transaction-specific drawers */}
-      {pageName === 'transactions' && (
-        <TransactionDrawer 
-          isOpen={openDrawer !== null}
-          onClose={closeDrawer}
-          drawerType={openDrawer as any || 'add'}
-        />
-      )}
-
-      {/* Demand-specific drawers */}
-      {pageName === 'demand' && (
-        <DemandDrawer 
-          isOpen={openDrawer !== null}
-          onClose={closeDrawer}
-          drawerType={openDrawer as any || 'add'}
-        />
-      )}
     </div>
   );
 };

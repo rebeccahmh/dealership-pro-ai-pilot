@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { CreditCard, Plus, Upload } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
 import ActionBar from '@/components/ActionBar';
@@ -11,23 +11,23 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import MainLayout from '@/components/layout/MainLayout';
+import TransactionDrawer from '@/components/drawers/TransactionDrawer';
 
 const Transactions = () => {
   const { transactions } = useAppContext();
   const { toast } = useToast();
+  const [openDrawer, setOpenDrawer] = useState<string | null>(null);
   
   const handleAddTransaction = () => {
-    toast({
-      title: "Add Transaction",
-      description: "The add transaction functionality will be implemented here",
-    });
+    setOpenDrawer('add');
   };
 
   const handleImport = () => {
-    toast({
-      title: "Import Transactions",
-      description: "The import transactions functionality will be implemented here",
-    });
+    setOpenDrawer('import');
+  };
+
+  const closeDrawer = () => {
+    setOpenDrawer(null);
   };
   
   const getStatusColor = (status: string) => {
@@ -118,6 +118,15 @@ const Transactions = () => {
           )}
         </div>
       </div>
+      
+      {/* Custom drawer component */}
+      {openDrawer && (
+        <TransactionDrawer
+          isOpen={openDrawer !== null}
+          onClose={closeDrawer}
+          drawerType={openDrawer as 'add' | 'import' | 'email' | 'export' | 'print'}
+        />
+      )}
     </MainLayout>
   );
 };

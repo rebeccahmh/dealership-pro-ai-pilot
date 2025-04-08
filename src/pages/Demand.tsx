@@ -9,31 +9,28 @@ import { Button } from '@/components/ui/button';
 import { useAppContext } from '@/context/AppContext';
 import { useToast } from '@/hooks/use-toast';
 import MainLayout from '@/components/layout/MainLayout';
+import DemandDrawer from '@/components/drawers/DemandDrawer';
 
 const Demand = () => {
   const [activeTab, setActiveTab] = useState('management');
   const { vehicles } = useAppContext();
   const { toast } = useToast();
+  const [openDrawer, setOpenDrawer] = useState<string | null>(null);
   
   const handleAddDemand = () => {
-    toast({
-      title: "Add Demand Entry",
-      description: "The add demand entry functionality will be implemented here",
-    });
+    setOpenDrawer('add');
   };
 
   const handleImport = () => {
-    toast({
-      title: "Import Demand Data",
-      description: "The import demand data functionality will be implemented here",
-    });
+    setOpenDrawer('import');
   };
 
   const handleByClients = () => {
-    toast({
-      title: "By Clients",
-      description: "Showing demand data organized by clients",
-    });
+    setOpenDrawer('clients');
+  };
+
+  const closeDrawer = () => {
+    setOpenDrawer(null);
   };
   
   return (
@@ -107,6 +104,15 @@ const Demand = () => {
           />
         </div>
       </div>
+
+      {/* Custom drawer component */}
+      {openDrawer && (
+        <DemandDrawer
+          isOpen={openDrawer !== null}
+          onClose={closeDrawer}
+          drawerType={openDrawer as 'add' | 'import' | 'email' | 'export' | 'print' | 'clients'}
+        />
+      )}
     </MainLayout>
   );
 };
