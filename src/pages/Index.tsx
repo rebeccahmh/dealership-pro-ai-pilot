@@ -8,6 +8,7 @@ import PerformanceChart from "@/components/dashboard/PerformanceChart";
 import VehicleTable from "@/components/dashboard/VehicleTable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAppContext } from "@/context/AppContext";
+import EmptyState from "@/components/EmptyState";
 
 const Index = () => {
   const { vehicles, dealershipPerformanceData, myPerformanceData } = useAppContext();
@@ -15,8 +16,8 @@ const Index = () => {
   // Calculate stats based on actual data
   const totalVehicles = vehicles.length;
   const availableVehicles = vehicles.filter(v => v.status === "In Stock").length;
-  const totalCustomers = 2453; // Example static value since we don't have all customers in context
-  const monthlySales = "$328,500"; // Example static value
+  const totalCustomers = 0; // No static data
+  const monthlySales = "$0"; // No static data
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -35,8 +36,6 @@ const Index = () => {
                 description="vehicles in inventory"
                 icon={Car}
                 iconColor="text-autoretech-blue"
-                trend="up"
-                trendValue="+4% from last month"
               />
               <StatCard 
                 title="Available Vehicles"
@@ -47,12 +46,10 @@ const Index = () => {
               />
               <StatCard 
                 title="Total Customers"
-                value={totalCustomers.toLocaleString()}
+                value={totalCustomers.toString()}
                 description="registered customers"
                 icon={Users}
                 iconColor="text-autoretech-yellow"
-                trend="up"
-                trendValue="+12% from last month"
               />
               <StatCard 
                 title="Monthly Sales"
@@ -60,8 +57,6 @@ const Index = () => {
                 description="in June 2025"
                 icon={DollarSign}
                 iconColor="text-green-600"
-                trend="up"
-                trendValue="+8% from last month"
               />
             </div>
             
@@ -92,10 +87,18 @@ const Index = () => {
             {/* Vehicle Inventory */}
             <div className="space-y-4">
               <h2 className="text-xl font-semibold">Recent Inventory</h2>
-              <VehicleTable 
-                title="Recently Added Vehicles"
-                vehicles={vehicles}
-              />
+              {vehicles.length > 0 ? (
+                <VehicleTable 
+                  title="Recently Added Vehicles"
+                  vehicles={vehicles}
+                />
+              ) : (
+                <EmptyState 
+                  message="No vehicle records available" 
+                  actionLabel="Add Vehicle" 
+                  onAction={() => {}}
+                />
+              )}
             </div>
           </div>
         </div>
