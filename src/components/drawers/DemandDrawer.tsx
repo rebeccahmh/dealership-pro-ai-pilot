@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { 
   Drawer, 
@@ -412,17 +411,7 @@ const DemandDrawer = ({ isOpen, onClose, drawerType }: DemandDrawerProps) => {
                 <div className="space-y-4">
                   <Label>Clients</Label>
                   <div className="max-h-60 overflow-y-auto space-y-2">
-                    {['ABC Corporation', 'XYZ Ltd', 'Acme Inc', 'Tech Solutions', 'Global Enterprises', 
-                      'Local Business', 'City Motors', 'Regional Transport', 'Express Deliveries', 'VIP Services'].map((client, index) => (
-                      <div key={index} className="flex items-center">
-                        <input 
-                          type="checkbox" 
-                          id={`client-${index}`} 
-                          className="mr-2" 
-                        />
-                        <Label htmlFor={`client-${index}`}>{client}</Label>
-                      </div>
-                    ))}
+                    <p className="text-sm text-gray-500">No clients available. Add clients to see them here.</p>
                   </div>
                 </div>
                 
