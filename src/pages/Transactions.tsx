@@ -26,6 +26,18 @@ const Transactions = () => {
     setOpenDrawer('import');
   };
 
+  const handleEmail = () => {
+    setOpenDrawer('email');
+  };
+
+  const handleExport = () => {
+    setOpenDrawer('export');
+  };
+
+  const handlePrint = () => {
+    setOpenDrawer('print');
+  };
+
   const closeDrawer = () => {
     setOpenDrawer(null);
   };
@@ -54,6 +66,10 @@ const Transactions = () => {
             count={transactions.length}
             icon={<CreditCard className="h-5 w-5" />}
             pageName="transactions"
+            actions={['email', 'export', 'print', 'close']}
+            onEmail={handleEmail}
+            onExport={handleExport}
+            onPrint={handlePrint}
             customActions={
               <div className="flex space-x-2 mr-2">
                 <Button 

@@ -82,20 +82,14 @@ const Navbar = () => {
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem 
-              onSelect={(e) => {
-                e.preventDefault();
-                handleProfileClick();
-              }}
+              onClick={handleProfileClick}
               className="cursor-pointer hover:bg-gray-100 focus:bg-gray-100"
             >
               <User className="mr-2 h-4 w-4" />
               Profile
             </DropdownMenuItem>
             <DropdownMenuItem 
-              onSelect={(e) => {
-                e.preventDefault();
-                handleSettingsClick();
-              }}
+              onClick={handleSettingsClick}
               className="cursor-pointer hover:bg-gray-100 focus:bg-gray-100"
             >
               <Settings className="mr-2 h-4 w-4" />
@@ -103,10 +97,7 @@ const Navbar = () => {
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem 
-              onSelect={(e) => {
-                e.preventDefault();
-                handleLogout();
-              }}
+              onClick={handleLogout}
               className="cursor-pointer hover:bg-gray-100 focus:bg-gray-100"
             >
               Log out
