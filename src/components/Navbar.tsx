@@ -20,6 +20,7 @@ const Navbar = () => {
   
   const handleSettingsClick = () => {
     navigate("/settings");
+    console.log("Navigating to settings");
   };
   
   const handleProfileClick = () => {
@@ -27,6 +28,7 @@ const Navbar = () => {
       title: "Profile",
       description: "Profile page functionality coming soon.",
     });
+    console.log("Profile clicked");
   };
   
   const handleLogout = () => {
@@ -34,6 +36,7 @@ const Navbar = () => {
       title: "Logged Out",
       description: "You have been logged out successfully.",
     });
+    console.log("Logout clicked");
   };
   
   return (
@@ -75,13 +78,28 @@ const Navbar = () => {
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="bg-white">
+          <DropdownMenuContent align="end" className="bg-white z-50">
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleProfileClick} className="cursor-pointer">Profile</DropdownMenuItem>
-            <DropdownMenuItem onClick={handleSettingsClick} className="cursor-pointer">Settings</DropdownMenuItem>
+            <DropdownMenuItem 
+              onClick={handleProfileClick} 
+              className="cursor-pointer hover:bg-gray-100"
+            >
+              Profile
+            </DropdownMenuItem>
+            <DropdownMenuItem 
+              onClick={handleSettingsClick} 
+              className="cursor-pointer hover:bg-gray-100"
+            >
+              Settings
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">Log out</DropdownMenuItem>
+            <DropdownMenuItem 
+              onClick={handleLogout} 
+              className="cursor-pointer hover:bg-gray-100"
+            >
+              Log out
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
