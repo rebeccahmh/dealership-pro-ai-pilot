@@ -9,16 +9,63 @@ import VehicleTable from '@/components/dashboard/VehicleTable';
 import { useToast } from '@/hooks/use-toast';
 import CustomVehicleActionButtons from './CustomVehicleActionButtons';
 import { useAppContext } from '@/context/AppContext';
+import VehicleDrawer from '../drawers/VehicleDrawer';
 
 const VehiclePageContent = () => {
   const [activeTab, setActiveTab] = useState('warranty');
   const { vehicles } = useAppContext();
   const { toast } = useToast();
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [drawerType, setDrawerType] = useState<"new" | "import" | "prep" | "archive" | "available" | "email" | "export" | "print">("new");
   
   // Filter vehicles by warranty (assuming warranty means "In Stock" or "Reserved")
   const warrantyVehicles = vehicles.filter(v => 
     v.status === "In Stock" || v.status === "Reserved"
   );
+
+  const handleNewVehicle = () => {
+    setDrawerType("new");
+    setDrawerOpen(true);
+  };
+
+  const handleImport = () => {
+    setDrawerType("import");
+    setDrawerOpen(true);
+  };
+
+  const handleInPrep = () => {
+    setDrawerType("prep");
+    setDrawerOpen(true);
+  };
+
+  const handleArchive = () => {
+    setDrawerType("archive");
+    setDrawerOpen(true);
+  };
+
+  const handleAvailable = () => {
+    setDrawerType("available");
+    setDrawerOpen(true);
+  };
+
+  const handleEmail = () => {
+    setDrawerType("email");
+    setDrawerOpen(true);
+  };
+
+  const handleExport = () => {
+    setDrawerType("export");
+    setDrawerOpen(true);
+  };
+
+  const handlePrint = () => {
+    setDrawerType("print");
+    setDrawerOpen(true);
+  };
+
+  const closeDrawer = () => {
+    setDrawerOpen(false);
+  };
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">
@@ -48,7 +95,18 @@ const VehiclePageContent = () => {
           title="Vehicles under Warranty" 
           count={warrantyVehicles.length}
           icon={<Car className="h-5 w-5" />}
-          customActions={<CustomVehicleActionButtons />}
+          customActions={
+            <CustomVehicleActionButtons 
+              handleNewVehicle={handleNewVehicle}
+              handleImport={handleImport}
+              handleInPrep={handleInPrep}
+              handleArchive={handleArchive}
+              handleAvailable={handleAvailable}
+            />
+          }
+          onEmail={handleEmail}
+          onExport={handleExport}
+          onPrint={handlePrint}
           pageName="vehicles"
         />
         
@@ -62,15 +120,9 @@ const VehiclePageContent = () => {
             <EmptyState 
               message="There are no vehicle records to display" 
               actionLabel="Add Vehicle"
-              onAction={() => toast({
-                title: "Add Vehicle",
-                description: "Opening vehicle form",
-              })}
+              onAction={handleNewVehicle}
               secondaryActionLabel="Import Vehicles"
-              onSecondaryAction={() => toast({
-                title: "Import Vehicles",
-                description: "Opening import dialog",
-              })}
+              onSecondaryAction={handleImport}
             />
           )
         ) : (
@@ -83,18 +135,18 @@ const VehiclePageContent = () => {
             <EmptyState 
               message="There are no vehicle records to display" 
               actionLabel="Add Vehicle"
-              onAction={() => toast({
-                title: "Add Vehicle",
-                description: "Opening vehicle form",
-              })}
+              onAction={handleNewVehicle}
               secondaryActionLabel="Import Vehicles"
-              onSecondaryAction={() => toast({
-                title: "Import Vehicles",
-                description: "Opening import dialog",
-              })}
+              onSecondaryAction={handleImport}
             />
           )
         )}
+
+        <VehicleDrawer 
+          isOpen={drawerOpen} 
+          onClose={closeDrawer} 
+          drawerType={drawerType} 
+        />
       </div>
     </div>
   );

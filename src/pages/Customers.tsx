@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Users, Plus, Upload } from 'lucide-react';
 import PageHeader from '@/components/PageHeader';
 import ActionBar from '@/components/ActionBar';
@@ -11,16 +11,53 @@ import { Button } from '@/components/ui/button';
 import EmptyState from '@/components/EmptyState';
 import { useAppContext } from '@/context/AppContext';
 import { useToast } from '@/hooks/use-toast';
+import CustomerDrawer from '@/components/drawers/CustomerDrawer';
 
 const Customers = () => {
   const { customers } = useAppContext();
   const { toast } = useToast();
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [drawerType, setDrawerType] = useState<"add" | "import" | "email" | "export" | "print" | "archive">("add");
   
-  const CustomActionButtons = ({ handleAddCustomer, handleImport }: any) => (
+  const handleAddCustomer = () => {
+    setDrawerType("add");
+    setDrawerOpen(true);
+  };
+
+  const handleImport = () => {
+    setDrawerType("import");
+    setDrawerOpen(true);
+  };
+
+  const handleEmail = () => {
+    setDrawerType("email");
+    setDrawerOpen(true);
+  };
+
+  const handleExport = () => {
+    setDrawerType("export");
+    setDrawerOpen(true);
+  };
+
+  const handlePrint = () => {
+    setDrawerType("print");
+    setDrawerOpen(true);
+  };
+
+  const handleArchive = () => {
+    setDrawerType("archive");
+    setDrawerOpen(true);
+  };
+
+  const closeDrawer = () => {
+    setDrawerOpen(false);
+  };
+  
+  const CustomActionButtons = () => (
     <div className="flex space-x-2 mr-2">
       <Button 
-        variant="ghost" 
-        className="bg-autoretech-blue text-white hover:bg-autoretech-blue/90 px-3 flex items-center gap-1" 
+        variant="blue" 
+        className="flex items-center gap-1" 
         size="sm"
         onClick={handleAddCustomer}
       >
@@ -28,8 +65,8 @@ const Customers = () => {
         Add Customer
       </Button>
       <Button 
-        variant="ghost" 
-        className="bg-autoretech-blue text-white hover:bg-autoretech-blue/90 px-3 flex items-center gap-1" 
+        variant="blue" 
+        className="flex items-center gap-1" 
         size="sm"
         onClick={handleImport}
       >
@@ -54,6 +91,11 @@ const Customers = () => {
                 count={customers.length}
                 icon={<Users className="h-5 w-5" />}
                 customActions={<CustomActionButtons />}
+                actions={['email', 'export', 'print', 'archive', 'close']}
+                onEmail={handleEmail}
+                onExport={handleExport}
+                onPrint={handlePrint}
+                onArchive={handleArchive}
                 pageName="customers"
               />
               
@@ -96,15 +138,9 @@ const Customers = () => {
                 <EmptyState 
                   message="There are no customer records to display" 
                   actionLabel="Add Customer"
-                  onAction={() => toast({
-                    title: "Add Customer",
-                    description: "Opening customer form",
-                  })}
+                  onAction={handleAddCustomer}
                   secondaryActionLabel="Import Customers"
-                  onSecondaryAction={() => toast({
-                    title: "Import Customers",
-                    description: "Opening import dialog",
-                  })}
+                  onSecondaryAction={handleImport}
                 />
               )}
               
@@ -115,6 +151,12 @@ const Customers = () => {
           </div>
         </div>
       </div>
+      
+      <CustomerDrawer 
+        isOpen={drawerOpen} 
+        onClose={closeDrawer} 
+        drawerType={drawerType} 
+      />
     </div>
   );
 };
