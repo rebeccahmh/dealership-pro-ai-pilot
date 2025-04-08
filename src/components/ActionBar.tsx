@@ -1,10 +1,11 @@
-
 import React, { ReactNode, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { X, Mail, Printer, Download, Archive } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import VehicleDrawer from './drawers/VehicleDrawer';
 import CustomerDrawer from './drawers/CustomerDrawer';
+import TransactionDrawer from './drawers/TransactionDrawer';
+import DemandDrawer from './drawers/DemandDrawer';
 
 type ActionBarProps = {
   title: string;
@@ -44,6 +45,12 @@ const ActionBar = ({
       setOpenDrawer('email');
     } else if (pageName === 'customers') {
       setOpenDrawer('email');
+    } else if (pageName === 'transactions') {
+      setOpenDrawer('email');
+    } else if (pageName === 'demand') {
+      setOpenDrawer('email');
+    } else if (pageName === 'marketing') {
+      setOpenDrawer('email');
     } else {
       toast({
         title: "Email Action",
@@ -56,6 +63,12 @@ const ActionBar = ({
     if (pageName === 'vehicles') {
       setOpenDrawer('export');
     } else if (pageName === 'customers') {
+      setOpenDrawer('export');
+    } else if (pageName === 'transactions') {
+      setOpenDrawer('export');
+    } else if (pageName === 'demand') {
+      setOpenDrawer('export');
+    } else if (pageName === 'marketing') {
       setOpenDrawer('export');
     } else {
       toast({
@@ -70,6 +83,12 @@ const ActionBar = ({
       setOpenDrawer('print');
     } else if (pageName === 'customers') {
       setOpenDrawer('print');
+    } else if (pageName === 'transactions') {
+      setOpenDrawer('print');
+    } else if (pageName === 'demand') {
+      setOpenDrawer('print');
+    } else if (pageName === 'marketing') {
+      setOpenDrawer('print');
     } else {
       toast({
         title: "Print Action",
@@ -82,6 +101,10 @@ const ActionBar = ({
     if (pageName === 'vehicles') {
       setOpenDrawer('archive');
     } else if (pageName === 'customers') {
+      setOpenDrawer('archive');
+    } else if (pageName === 'transactions') {
+      setOpenDrawer('archive');
+    } else if (pageName === 'demand') {
       setOpenDrawer('archive');
     } else {
       toast({
@@ -229,6 +252,24 @@ const ActionBar = ({
       {/* Customer-specific drawers */}
       {pageName === 'customers' && (
         <CustomerDrawer 
+          isOpen={openDrawer !== null}
+          onClose={closeDrawer}
+          drawerType={openDrawer as any || 'add'}
+        />
+      )}
+
+      {/* Transaction-specific drawers */}
+      {pageName === 'transactions' && (
+        <TransactionDrawer 
+          isOpen={openDrawer !== null}
+          onClose={closeDrawer}
+          drawerType={openDrawer as any || 'add'}
+        />
+      )}
+
+      {/* Demand-specific drawers */}
+      {pageName === 'demand' && (
+        <DemandDrawer 
           isOpen={openDrawer !== null}
           onClose={closeDrawer}
           drawerType={openDrawer as any || 'add'}
