@@ -75,13 +75,13 @@ const Navbar = () => {
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align="end" className="bg-white">
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleProfileClick}>Profile</DropdownMenuItem>
-            <DropdownMenuItem onClick={handleSettingsClick}>Settings</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleProfileClick} className="cursor-pointer">Profile</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleSettingsClick} className="cursor-pointer">Settings</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleLogout}>Log out</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">Log out</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
