@@ -17,6 +17,7 @@ const VehiclePageContent = () => {
   const { toast } = useToast();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [drawerType, setDrawerType] = useState<"new" | "import" | "prep" | "archive" | "available" | "email" | "export" | "print">("new");
+  const [selectedVehicles, setSelectedVehicles] = useState<string[]>([]);
   
   // Filter vehicles by warranty (assuming warranty means "In Stock" or "Reserved")
   const warrantyVehicles = vehicles.filter(v => 
@@ -51,28 +52,16 @@ const VehiclePageContent = () => {
   const handleEmail = () => {
     setDrawerType("email");
     setDrawerOpen(true);
-    toast({
-      title: "Email action initiated",
-      description: "Email functionality is ready to use."
-    });
   };
 
   const handleExport = () => {
     setDrawerType("export");
     setDrawerOpen(true);
-    toast({
-      title: "Export action initiated",
-      description: "Export functionality is ready to use."
-    });
   };
 
   const handlePrint = () => {
     setDrawerType("print");
     setDrawerOpen(true);
-    toast({
-      title: "Print action initiated",
-      description: "Print functionality is ready to use."
-    });
   };
 
   const closeDrawer = () => {
@@ -127,6 +116,7 @@ const VehiclePageContent = () => {
             <VehicleTable 
               title="Vehicles under Warranty"
               vehicles={warrantyVehicles}
+              onSelect={setSelectedVehicles}
             />
           ) : (
             <EmptyState 
@@ -142,6 +132,7 @@ const VehiclePageContent = () => {
             <VehicleTable 
               title="All Vehicles"
               vehicles={vehicles}
+              onSelect={setSelectedVehicles}
             />
           ) : (
             <EmptyState 

@@ -10,6 +10,8 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface Vehicle {
   id: string;
@@ -25,9 +27,12 @@ interface Vehicle {
 interface VehicleTableProps {
   title: string;
   vehicles: Vehicle[];
+  onSelect?: (selectedIds: string[]) => void;
 }
 
-const VehicleTable = ({ title, vehicles }: VehicleTableProps) => {
+const VehicleTable = ({ title, vehicles, onSelect }: VehicleTableProps) => {
+  const [selectedVehicles, setSelectedVehicles] = useState<string[]>([]);
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case "In Stock":
@@ -43,9 +48,38 @@ const VehicleTable = ({ title, vehicles }: VehicleTableProps) => {
     }
   };
 
+  const handleSelect = (id: string) => {
+    setSelectedVehicles(prev => {
+      const newSelection = prev.includes(id)
+        ? prev.filter(vehicleId => vehicleId !== id)
+        : [...prev, id];
+      
+      if (onSelect) {
+        onSelect(newSelection);
+      }
+      
+      return newSelection;
+    });
+  };
+
+  const handleSelectAll = () => {
+    if (selectedVehicles.length === vehicles.length) {
+      setSelectedVehicles([]);
+      if (onSelect) {
+        onSelect([]);
+      }
+    } else {
+      const allIds = vehicles.map(v => v.id);
+      setSelectedVehicles(allIds);
+      if (onSelect) {
+        onSelect(allIds);
+      }
+    }
+  };
+
   return (
     <Card>
-      <CardHeader className="flex items-center justify-between">
+      <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>{title}</CardTitle>
         <Button variant="outline" size="sm">View All</Button>
       </CardHeader>
@@ -53,6 +87,12 @@ const VehicleTable = ({ title, vehicles }: VehicleTableProps) => {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead className="w-[50px]">
+                <Checkbox
+                  checked={selectedVehicles.length === vehicles.length && vehicles.length > 0}
+                  onCheckedChange={handleSelectAll}
+                />
+              </TableHead>
               <TableHead>VIN</TableHead>
               <TableHead>Model</TableHead>
               <TableHead>Year</TableHead>
@@ -64,6 +104,12 @@ const VehicleTable = ({ title, vehicles }: VehicleTableProps) => {
           <TableBody>
             {vehicles.map((vehicle) => (
               <TableRow key={vehicle.id}>
+                <TableCell>
+                  <Checkbox
+                    checked={selectedVehicles.includes(vehicle.id)}
+                    onCheckedChange={() => handleSelect(vehicle.id)}
+                  />
+                </TableCell>
                 <TableCell className="font-mono">{vehicle.vin}</TableCell>
                 <TableCell>
                   <div className="font-medium">{vehicle.make}</div>
