@@ -1,8 +1,10 @@
 
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { X, Mail, Printer, Download, Archive } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import VehicleDrawer from './drawers/VehicleDrawer';
+import CustomerDrawer from './drawers/CustomerDrawer';
 
 type ActionBarProps = {
   title: string;
@@ -11,10 +13,7 @@ type ActionBarProps = {
   actions?: Array<'email' | 'export' | 'print' | 'archive' | 'close'>;
   customActions?: ReactNode;
   onClose?: () => void;
-  onEmail?: () => void;
-  onExport?: () => void;
-  onPrint?: () => void;
-  onArchive?: () => void;
+  pageName?: 'vehicles' | 'customers' | 'transactions' | 'demand' | 'marketing';
 };
 
 const ActionBar = ({ 
@@ -24,12 +23,10 @@ const ActionBar = ({
   actions = ['email', 'export', 'print', 'close'], 
   customActions,
   onClose,
-  onEmail,
-  onExport,
-  onPrint,
-  onArchive
+  pageName = 'vehicles'
 }: ActionBarProps) => {
   const { toast } = useToast();
+  const [openDrawer, setOpenDrawer] = useState<string | null>(null);
   
   const handleClose = () => {
     if (onClose) {
@@ -43,8 +40,10 @@ const ActionBar = ({
   };
   
   const handleEmail = () => {
-    if (onEmail) {
-      onEmail();
+    if (pageName === 'vehicles') {
+      setOpenDrawer('email');
+    } else if (pageName === 'customers') {
+      setOpenDrawer('email');
     } else {
       toast({
         title: "Email Action",
@@ -54,8 +53,10 @@ const ActionBar = ({
   };
   
   const handleExport = () => {
-    if (onExport) {
-      onExport();
+    if (pageName === 'vehicles') {
+      setOpenDrawer('export');
+    } else if (pageName === 'customers') {
+      setOpenDrawer('export');
     } else {
       toast({
         title: "Export Action",
@@ -65,8 +66,10 @@ const ActionBar = ({
   };
   
   const handlePrint = () => {
-    if (onPrint) {
-      onPrint();
+    if (pageName === 'vehicles') {
+      setOpenDrawer('print');
+    } else if (pageName === 'customers') {
+      setOpenDrawer('print');
     } else {
       toast({
         title: "Print Action",
@@ -76,14 +79,63 @@ const ActionBar = ({
   };
   
   const handleArchive = () => {
-    if (onArchive) {
-      onArchive();
+    if (pageName === 'vehicles') {
+      setOpenDrawer('archive');
+    } else if (pageName === 'customers') {
+      setOpenDrawer('archive');
     } else {
       toast({
         title: "Archive Action",
         description: "Archive button clicked",
       });
     }
+  };
+
+  const handleNewVehicle = () => {
+    setOpenDrawer('new');
+  };
+
+  const handleImport = () => {
+    if (pageName === 'vehicles') {
+      setOpenDrawer('import');
+    } else if (pageName === 'customers') {
+      setOpenDrawer('import');
+    } else {
+      toast({
+        title: "Import Action",
+        description: "Import button clicked",
+      });
+    }
+  };
+
+  const handleInPrep = () => {
+    if (pageName === 'vehicles') {
+      setOpenDrawer('prep');
+    } else {
+      toast({
+        title: "In Prep Action",
+        description: "In Prep button clicked",
+      });
+    }
+  };
+
+  const handleAvailable = () => {
+    if (pageName === 'vehicles') {
+      setOpenDrawer('available');
+    } else {
+      toast({
+        title: "Available Action",
+        description: "Available button clicked",
+      });
+    }
+  };
+
+  const handleAddCustomer = () => {
+    setOpenDrawer('add');
+  };
+  
+  const closeDrawer = () => {
+    setOpenDrawer(null);
   };
   
   return (
@@ -94,7 +146,14 @@ const ActionBar = ({
       </div>
       
       <div className="flex items-center space-x-1">
-        {customActions}
+        {customActions && React.cloneElement(customActions as React.ReactElement, {
+          handleNewVehicle,
+          handleImport,
+          handleInPrep,
+          handleArchive,
+          handleAvailable,
+          handleAddCustomer
+        })}
         
         <div className="bg-autoretech-blue text-white rounded-full flex items-center">
           {actions.includes('archive') && (
@@ -157,6 +216,24 @@ const ActionBar = ({
           )}
         </div>
       </div>
+
+      {/* Vehicle-specific drawers */}
+      {pageName === 'vehicles' && (
+        <VehicleDrawer 
+          isOpen={openDrawer !== null}
+          onClose={closeDrawer}
+          drawerType={openDrawer as any || 'new'}
+        />
+      )}
+
+      {/* Customer-specific drawers */}
+      {pageName === 'customers' && (
+        <CustomerDrawer 
+          isOpen={openDrawer !== null}
+          onClose={closeDrawer}
+          drawerType={openDrawer as any || 'add'}
+        />
+      )}
     </div>
   );
 };

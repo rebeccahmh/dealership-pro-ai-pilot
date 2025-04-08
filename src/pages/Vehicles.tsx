@@ -21,62 +21,59 @@ const Vehicles = () => {
   const warrantyVehicles = vehicles.filter(v => 
     v.status === "In Stock" || v.status === "Reserved"
   );
-  
-  const handleAddVehicle = () => {
-    toast({
-      title: "Add Vehicle",
-      description: "The add vehicle functionality will be implemented here",
-    });
-  };
 
-  const handleImport = () => {
-    toast({
-      title: "Import Vehicles",
-      description: "The import vehicle data functionality will be implemented here",
-    });
-  };
-
-  const handleInPrep = () => {
-    toast({
-      title: "In Prep Filter",
-      description: "Filtering vehicles in preparation",
-    });
-  };
-
-  const handleArchive = () => {
-    toast({
-      title: "Archive Filter",
-      description: "Showing archived vehicles",
-    });
-  };
-
-  const handleAvailable = () => {
-    toast({
-      title: "Available Filter",
-      description: "Showing available vehicles",
-    });
-  };
-
-  const handleEmail = () => {
-    toast({
-      title: "Email Vehicles",
-      description: "Sending vehicles data via email",
-    });
-  };
-
-  const handleExport = () => {
-    toast({
-      title: "Export Vehicles",
-      description: "Exporting vehicles data",
-    });
-  };
-
-  const handlePrint = () => {
-    toast({
-      title: "Print Vehicles",
-      description: "Printing vehicles list",
-    });
-  };
+  const CustomActionButtons = ({ 
+    handleNewVehicle, 
+    handleImport, 
+    handleInPrep, 
+    handleArchive, 
+    handleAvailable 
+  }: any) => (
+    <div className="flex space-x-2 mr-2">
+      <Button 
+        variant="ghost" 
+        className="bg-autoretech-blue text-white hover:bg-autoretech-blue/90 px-3 flex items-center gap-1" 
+        size="sm"
+        onClick={handleNewVehicle}
+      >
+        <Plus className="h-4 w-4" />
+        New Vehicle
+      </Button>
+      <Button 
+        variant="ghost" 
+        className="bg-autoretech-blue text-white hover:bg-autoretech-blue/90 px-3 flex items-center gap-1" 
+        size="sm"
+        onClick={handleImport}
+      >
+        <Upload className="h-4 w-4" />
+        Import
+      </Button>
+      <Button 
+        variant="ghost" 
+        className="bg-autoretech-blue text-white hover:bg-autoretech-blue/90 px-3" 
+        size="sm"
+        onClick={handleInPrep}
+      >
+        In Prep
+      </Button>
+      <Button 
+        variant="ghost" 
+        className="bg-autoretech-blue text-white hover:bg-autoretech-blue/90 px-3" 
+        size="sm"
+        onClick={handleArchive}
+      >
+        Archive
+      </Button>
+      <Button 
+        variant="ghost" 
+        className="bg-autoretech-blue text-white hover:bg-autoretech-blue/90 px-3" 
+        size="sm"
+        onClick={handleAvailable}
+      >
+        Available
+      </Button>
+    </div>
+  );
   
   return (
     <div className="flex h-screen overflow-hidden">
@@ -111,55 +108,8 @@ const Vehicles = () => {
                 title="Vehicles under Warranty" 
                 count={warrantyVehicles.length}
                 icon={<Car className="h-5 w-5" />}
-                customActions={
-                  <div className="flex space-x-2 mr-2">
-                    <Button 
-                      variant="ghost" 
-                      className="bg-autoretech-blue text-white hover:bg-autoretech-blue/90 px-3 flex items-center gap-1" 
-                      size="sm"
-                      onClick={handleAddVehicle}
-                    >
-                      <Plus className="h-4 w-4" />
-                      New Vehicle
-                    </Button>
-                    <Button 
-                      variant="ghost" 
-                      className="bg-autoretech-blue text-white hover:bg-autoretech-blue/90 px-3 flex items-center gap-1" 
-                      size="sm"
-                      onClick={handleImport}
-                    >
-                      <Upload className="h-4 w-4" />
-                      Import
-                    </Button>
-                    <Button 
-                      variant="ghost" 
-                      className="bg-autoretech-blue text-white hover:bg-autoretech-blue/90 px-3" 
-                      size="sm"
-                      onClick={handleInPrep}
-                    >
-                      In Prep
-                    </Button>
-                    <Button 
-                      variant="ghost" 
-                      className="bg-autoretech-blue text-white hover:bg-autoretech-blue/90 px-3" 
-                      size="sm"
-                      onClick={handleArchive}
-                    >
-                      Archive
-                    </Button>
-                    <Button 
-                      variant="ghost" 
-                      className="bg-autoretech-blue text-white hover:bg-autoretech-blue/90 px-3" 
-                      size="sm"
-                      onClick={handleAvailable}
-                    >
-                      Available
-                    </Button>
-                  </div>
-                }
-                onEmail={handleEmail}
-                onExport={handleExport}
-                onPrint={handlePrint}
+                customActions={<CustomActionButtons />}
+                pageName="vehicles"
               />
               
               {activeTab === 'warranty' ? (
@@ -172,9 +122,15 @@ const Vehicles = () => {
                   <EmptyState 
                     message="There are no vehicle records to display" 
                     actionLabel="Add Vehicle"
-                    onAction={handleAddVehicle}
+                    onAction={() => toast({
+                      title: "Add Vehicle",
+                      description: "Opening vehicle form",
+                    })}
                     secondaryActionLabel="Import Vehicles"
-                    onSecondaryAction={handleImport}
+                    onSecondaryAction={() => toast({
+                      title: "Import Vehicles",
+                      description: "Opening import dialog",
+                    })}
                   />
                 )
               ) : (
@@ -187,9 +143,15 @@ const Vehicles = () => {
                   <EmptyState 
                     message="There are no vehicle records to display" 
                     actionLabel="Add Vehicle"
-                    onAction={handleAddVehicle}
+                    onAction={() => toast({
+                      title: "Add Vehicle",
+                      description: "Opening vehicle form",
+                    })}
                     secondaryActionLabel="Import Vehicles"
-                    onSecondaryAction={handleImport}
+                    onSecondaryAction={() => toast({
+                      title: "Import Vehicles",
+                      description: "Opening import dialog",
+                    })}
                   />
                 )
               )}

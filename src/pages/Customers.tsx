@@ -16,19 +16,28 @@ const Customers = () => {
   const { customers } = useAppContext();
   const { toast } = useToast();
   
-  const handleAddCustomer = () => {
-    toast({
-      title: "Add Customer",
-      description: "The add customer functionality will be implemented here",
-    });
-  };
-
-  const handleImportCustomers = () => {
-    toast({
-      title: "Import Customers",
-      description: "The import customers functionality will be implemented here",
-    });
-  };
+  const CustomActionButtons = ({ handleAddCustomer, handleImport }: any) => (
+    <div className="flex space-x-2 mr-2">
+      <Button 
+        variant="ghost" 
+        className="bg-autoretech-blue text-white hover:bg-autoretech-blue/90 px-3 flex items-center gap-1" 
+        size="sm"
+        onClick={handleAddCustomer}
+      >
+        <Plus className="h-4 w-4" />
+        Add Customer
+      </Button>
+      <Button 
+        variant="ghost" 
+        className="bg-autoretech-blue text-white hover:bg-autoretech-blue/90 px-3 flex items-center gap-1" 
+        size="sm"
+        onClick={handleImport}
+      >
+        <Upload className="h-4 w-4" />
+        Import
+      </Button>
+    </div>
+  );
   
   return (
     <div className="flex h-screen overflow-hidden">
@@ -44,40 +53,8 @@ const Customers = () => {
                 title="Customers" 
                 count={customers.length}
                 icon={<Users className="h-5 w-5" />}
-                customActions={
-                  <div className="flex space-x-2 mr-2">
-                    <Button 
-                      variant="ghost" 
-                      className="bg-autoretech-blue text-white hover:bg-autoretech-blue/90 px-3 flex items-center gap-1" 
-                      size="sm"
-                      onClick={handleAddCustomer}
-                    >
-                      <Plus className="h-4 w-4" />
-                      Add Customer
-                    </Button>
-                    <Button 
-                      variant="ghost" 
-                      className="bg-autoretech-blue text-white hover:bg-autoretech-blue/90 px-3 flex items-center gap-1" 
-                      size="sm"
-                      onClick={handleImportCustomers}
-                    >
-                      <Upload className="h-4 w-4" />
-                      Import
-                    </Button>
-                  </div>
-                }
-                onEmail={() => toast({
-                  title: "Email Customers",
-                  description: "Sending customers data via email",
-                })}
-                onExport={() => toast({
-                  title: "Export Customers",
-                  description: "Exporting customers data",
-                })}
-                onPrint={() => toast({
-                  title: "Print Customers",
-                  description: "Printing customers list",
-                })}
+                customActions={<CustomActionButtons />}
+                pageName="customers"
               />
               
               {customers.length > 0 ? (
@@ -119,9 +96,15 @@ const Customers = () => {
                 <EmptyState 
                   message="There are no customer records to display" 
                   actionLabel="Add Customer"
-                  onAction={handleAddCustomer}
+                  onAction={() => toast({
+                    title: "Add Customer",
+                    description: "Opening customer form",
+                  })}
                   secondaryActionLabel="Import Customers"
-                  onSecondaryAction={handleImportCustomers}
+                  onSecondaryAction={() => toast({
+                    title: "Import Customers",
+                    description: "Opening import dialog",
+                  })}
                 />
               )}
               
