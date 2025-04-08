@@ -9,15 +9,35 @@ import VehicleTable from "@/components/dashboard/VehicleTable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAppContext } from "@/context/AppContext";
 import EmptyState from "@/components/EmptyState";
+import VehicleDrawer from "@/components/drawers/VehicleDrawer";
 
 const Index = () => {
   const { vehicles, dealershipPerformanceData, myPerformanceData } = useAppContext();
+  
+  // Add state for drawer control
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [drawerType, setDrawerType] = useState<"new" | "import" | "prep" | "archive" | "available" | "email" | "export" | "print">("new");
   
   // Calculate stats based on actual data
   const totalVehicles = vehicles.length;
   const availableVehicles = vehicles.filter(v => v.status === "In Stock").length;
   const totalCustomers = 0; // No static data
   const monthlySales = "$0"; // No static data
+
+  // Add handler functions for vehicle actions
+  const handleAddVehicle = () => {
+    setDrawerType("new");
+    setDrawerOpen(true);
+  };
+
+  const handleImportVehicles = () => {
+    setDrawerType("import");
+    setDrawerOpen(true);
+  };
+
+  const closeDrawer = () => {
+    setDrawerOpen(false);
+  };
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -96,13 +116,22 @@ const Index = () => {
                 <EmptyState 
                   message="No vehicle records available" 
                   actionLabel="Add Vehicle" 
-                  onAction={() => {}}
+                  onAction={handleAddVehicle}
+                  secondaryActionLabel="Import Vehicles"
+                  onSecondaryAction={handleImportVehicles}
                 />
               )}
             </div>
           </div>
         </div>
       </div>
+      
+      {/* Add Vehicle Drawer */}
+      <VehicleDrawer 
+        isOpen={drawerOpen} 
+        onClose={closeDrawer} 
+        drawerType={drawerType} 
+      />
     </div>
   );
 };
