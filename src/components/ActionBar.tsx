@@ -1,12 +1,7 @@
 
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode } from 'react';
 import { Button } from '@/components/ui/button';
 import { X, Mail, Printer, Download, Archive } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import VehicleDrawer from './drawers/VehicleDrawer';
-import CustomerDrawer from './drawers/CustomerDrawer';
-import TransactionDrawer from './drawers/TransactionDrawer';
-import DemandDrawer from './drawers/DemandDrawer';
 
 type ActionBarProps = {
   title: string;
@@ -27,46 +22,11 @@ const ActionBar = ({
   onClose,
   pageName = 'vehicles'
 }: ActionBarProps) => {
-  const { toast } = useToast();
-  // We're no longer using openDrawer state here since it's now handled in parent components
   
   const handleClose = () => {
     if (onClose) {
       onClose();
-    } else {
-      toast({
-        title: "Close Action",
-        description: "Close button clicked",
-      });
     }
-  };
-  
-  const handleEmail = () => {
-    toast({
-      title: `${pageName} - Email Action`,
-      description: "Email button clicked",
-    });
-  };
-  
-  const handleExport = () => {
-    toast({
-      title: `${pageName} - Export Action`,
-      description: "Export button clicked",
-    });
-  };
-  
-  const handlePrint = () => {
-    toast({
-      title: `${pageName} - Print Action`,
-      description: "Print button clicked",
-    });
-  };
-  
-  const handleArchive = () => {
-    toast({
-      title: `${pageName} - Archive Action`,
-      description: "Archive button clicked",
-    });
   };
   
   return (
@@ -85,7 +45,6 @@ const ActionBar = ({
               variant="ghost" 
               className="text-white hover:bg-autoretech-blue/90 px-3" 
               size="sm" 
-              onClick={handleArchive}
             >
               <Archive className="h-4 w-4 mr-1" />
               Archive
@@ -97,7 +56,6 @@ const ActionBar = ({
               variant="ghost" 
               className="text-white hover:bg-autoretech-blue/90 px-3" 
               size="sm" 
-              onClick={handleEmail}
             >
               <Mail className="h-4 w-4 mr-1" />
               Email
@@ -109,7 +67,6 @@ const ActionBar = ({
               variant="ghost" 
               className="text-white hover:bg-autoretech-blue/90 px-3" 
               size="sm" 
-              onClick={handleExport}
             >
               <Download className="h-4 w-4 mr-1" />
               Export
@@ -121,7 +78,6 @@ const ActionBar = ({
               variant="ghost" 
               className="text-white hover:bg-autoretech-blue/90 px-3" 
               size="sm" 
-              onClick={handlePrint}
             >
               <Printer className="h-4 w-4 mr-1" />
               Print
