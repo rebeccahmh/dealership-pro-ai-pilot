@@ -20,8 +20,8 @@ const CustomVehicleActionButtons: React.FC<CustomVehicleActionButtonsProps> = ({
 }) => (
   <div className="flex space-x-2 mr-2">
     <Button 
-      variant="ghost" 
-      className="bg-autoretech-blue text-white hover:bg-autoretech-blue/90 px-3 flex items-center gap-1" 
+      variant="blue" 
+      className="flex items-center gap-1" 
       size="sm"
       onClick={handleNewVehicle}
     >
@@ -29,8 +29,8 @@ const CustomVehicleActionButtons: React.FC<CustomVehicleActionButtonsProps> = ({
       New Vehicle
     </Button>
     <Button 
-      variant="ghost" 
-      className="bg-autoretech-blue text-white hover:bg-autoretech-blue/90 px-3 flex items-center gap-1" 
+      variant="blue" 
+      className="flex items-center gap-1" 
       size="sm"
       onClick={handleImport}
     >
@@ -38,24 +38,21 @@ const CustomVehicleActionButtons: React.FC<CustomVehicleActionButtonsProps> = ({
       Import
     </Button>
     <Button 
-      variant="ghost" 
-      className="bg-autoretech-blue text-white hover:bg-autoretech-blue/90 px-3" 
+      variant="blue" 
       size="sm"
       onClick={handleInPrep}
     >
       In Prep
     </Button>
     <Button 
-      variant="ghost" 
-      className="bg-autoretech-blue text-white hover:bg-autoretech-blue/90 px-3" 
+      variant="blue" 
       size="sm"
       onClick={handleArchive}
     >
       Archive
     </Button>
     <Button 
-      variant="ghost" 
-      className="bg-autoretech-blue text-white hover:bg-autoretech-blue/90 px-3" 
+      variant="blue" 
       size="sm"
       onClick={handleAvailable}
     >

@@ -10,6 +10,10 @@ type ActionBarProps = {
   actions?: Array<'email' | 'export' | 'print' | 'archive' | 'close'>;
   customActions?: ReactNode;
   onClose?: () => void;
+  onEmail?: () => void;
+  onExport?: () => void;
+  onPrint?: () => void;
+  onArchive?: () => void;
   pageName?: 'vehicles' | 'customers' | 'transactions' | 'demand' | 'marketing';
 };
 
@@ -20,12 +24,40 @@ const ActionBar = ({
   actions = ['email', 'export', 'print', 'close'], 
   customActions,
   onClose,
+  onEmail,
+  onExport,
+  onPrint,
+  onArchive,
   pageName = 'vehicles'
 }: ActionBarProps) => {
   
   const handleClose = () => {
     if (onClose) {
       onClose();
+    }
+  };
+
+  const handleEmail = () => {
+    if (onEmail) {
+      onEmail();
+    }
+  };
+
+  const handleExport = () => {
+    if (onExport) {
+      onExport();
+    }
+  };
+
+  const handlePrint = () => {
+    if (onPrint) {
+      onPrint();
+    }
+  };
+
+  const handleArchive = () => {
+    if (onArchive) {
+      onArchive();
     }
   };
   
@@ -44,7 +76,8 @@ const ActionBar = ({
             <Button 
               variant="ghost" 
               className="text-white hover:bg-autoretech-blue/90 px-3" 
-              size="sm" 
+              size="sm"
+              onClick={handleArchive}
             >
               <Archive className="h-4 w-4 mr-1" />
               Archive
@@ -55,7 +88,8 @@ const ActionBar = ({
             <Button 
               variant="ghost" 
               className="text-white hover:bg-autoretech-blue/90 px-3" 
-              size="sm" 
+              size="sm"
+              onClick={handleEmail}
             >
               <Mail className="h-4 w-4 mr-1" />
               Email
@@ -66,7 +100,8 @@ const ActionBar = ({
             <Button 
               variant="ghost" 
               className="text-white hover:bg-autoretech-blue/90 px-3" 
-              size="sm" 
+              size="sm"
+              onClick={handleExport}
             >
               <Download className="h-4 w-4 mr-1" />
               Export
@@ -77,7 +112,8 @@ const ActionBar = ({
             <Button 
               variant="ghost" 
               className="text-white hover:bg-autoretech-blue/90 px-3" 
-              size="sm" 
+              size="sm"
+              onClick={handlePrint}
             >
               <Printer className="h-4 w-4 mr-1" />
               Print

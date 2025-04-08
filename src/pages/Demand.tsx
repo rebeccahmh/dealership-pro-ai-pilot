@@ -29,6 +29,18 @@ const Demand = () => {
     setOpenDrawer('clients');
   };
 
+  const handleEmail = () => {
+    setOpenDrawer('email');
+  };
+
+  const handleExport = () => {
+    setOpenDrawer('export');
+  };
+
+  const handlePrint = () => {
+    setOpenDrawer('print');
+  };
+
   const closeDrawer = () => {
     setOpenDrawer(null);
   };
@@ -64,6 +76,9 @@ const Demand = () => {
             title="Vehicles to clients" 
             icon={<Car className="h-5 w-5" />}
             pageName="demand"
+            onEmail={handleEmail}
+            onExport={handleExport}
+            onPrint={handlePrint}
             customActions={
               <div className="flex space-x-2 mr-2">
                 <Button 

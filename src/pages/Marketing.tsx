@@ -176,6 +176,9 @@ const Marketing = () => {
                 title="Marketing" 
                 icon={<BarChartBig className="h-5 w-5" />}
                 pageName="marketing"
+                onEmail={handleEmail}
+                onExport={handleExport}
+                onPrint={handlePrint}
                 customActions={
                   <div className="flex space-x-2 mr-2">
                     <Button 
