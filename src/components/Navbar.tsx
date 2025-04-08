@@ -11,8 +11,31 @@ import {
   DropdownMenuSeparator, 
   DropdownMenuTrigger 
 } from "@/components/ui/dropdown-menu";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  
+  const handleSettingsClick = () => {
+    navigate("/settings");
+  };
+  
+  const handleProfileClick = () => {
+    toast({
+      title: "Profile",
+      description: "Profile page functionality coming soon.",
+    });
+  };
+  
+  const handleLogout = () => {
+    toast({
+      title: "Logged Out",
+      description: "You have been logged out successfully.",
+    });
+  };
+  
   return (
     <div className="h-16 border-b flex items-center justify-between px-4 md:px-6 bg-white">
       <div className="flex items-center">
@@ -35,7 +58,12 @@ const Navbar = () => {
         <Button variant="ghost" size="icon" className="text-gray-500">
           <Bell className="h-5 w-5" />
         </Button>
-        <Button variant="ghost" size="icon" className="text-gray-500">
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="text-gray-500"
+          onClick={handleSettingsClick}
+        >
           <Settings className="h-5 w-5" />
         </Button>
         <DropdownMenu>
@@ -50,10 +78,10 @@ const Navbar = () => {
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Profile</DropdownMenuItem>
-            <DropdownMenuItem>Settings</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleProfileClick}>Profile</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleSettingsClick}>Settings</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Log out</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>Log out</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
