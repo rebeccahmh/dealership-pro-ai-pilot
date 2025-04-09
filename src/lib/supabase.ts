@@ -11,8 +11,9 @@ if (!supabaseUrl || !supabaseAnonKey) {
   console.error("Supabase URL or anon key is missing. Please add them to your project settings.");
 }
 
-// Create the Supabase client
+// Create the Supabase client with fallback values for development
+// In production, make sure to properly configure your environment variables
 export const supabase = createClient(
-  supabaseUrl,
-  supabaseAnonKey
+  supabaseUrl || 'https://placeholder-url.supabase.co',
+  supabaseAnonKey || 'placeholder-key'
 );
