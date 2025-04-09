@@ -1,5 +1,5 @@
 
-import { Bell, Search, Settings, User } from "lucide-react";
+import { Bell, Search, Settings, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -13,10 +13,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/context/AuthContext";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user, signOut } = useAuth();
   
   const handleSettingsClick = () => {
     navigate("/settings");
@@ -31,12 +33,30 @@ const Navbar = () => {
     console.log("Profile clicked");
   };
   
-  const handleLogout = () => {
-    toast({
-      title: "Logged Out",
-      description: "You have been logged out successfully.",
-    });
-    console.log("Logout clicked");
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      toast({
+        title: "Logged Out",
+        description: "You have been logged out successfully.",
+      });
+      navigate("/auth/login");
+    } catch (error) {
+      console.error("Error logging out:", error);
+      toast({
+        title: "Error",
+        description: "Failed to log out. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  // Get user initials for avatar fallback
+  const getUserInitials = () => {
+    if (!user || !user.email) return "?";
+    
+    // Use the first letter of the email
+    return user.email.charAt(0).toUpperCase();
   };
   
   return (
@@ -74,7 +94,7 @@ const Navbar = () => {
             <Button variant="ghost" className="relative h-9 w-9 rounded-full">
               <Avatar className="h-9 w-9">
                 <AvatarImage src="" />
-                <AvatarFallback className="bg-gray-100 text-gray-800">JD</AvatarFallback>
+                <AvatarFallback className="bg-gray-100 text-gray-800">{getUserInitials()}</AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
@@ -100,6 +120,7 @@ const Navbar = () => {
               onClick={handleLogout}
               className="cursor-pointer hover:bg-gray-100 focus:bg-gray-100"
             >
+              <LogOut className="mr-2 h-4 w-4" />
               Log out
             </DropdownMenuItem>
           </DropdownMenuContent>
