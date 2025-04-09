@@ -1,13 +1,14 @@
 
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { Session, User } from '@supabase/supabase-js';
-import { supabase } from "@/lib/supabase";
+import { supabase, isAuthConfigured } from "@/lib/supabase";
 import { useToast } from "@/hooks/use-toast";
 
 type AuthContextType = {
   session: Session | null;
   user: User | null;
   loading: boolean;
+  isConfigured: boolean;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
@@ -22,59 +23,62 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const { toast } = useToast();
+  const isConfigured = isAuthConfigured();
 
   useEffect(() => {
-    const setData = async () => {
+    const getInitialSession = async () => {
       try {
-        const { data: { session }, error } = await supabase.auth.getSession();
-        if (error) {
-          console.error("Error fetching session:", error.message);
-          toast({
-            title: "Authentication Error",
-            description: "There was a problem connecting to the authentication service.",
-            variant: "destructive",
-          });
-        } else {
-          setSession(session);
-          setUser(session?.user ?? null);
+        setLoading(true);
+        
+        if (!isConfigured) {
+          console.log("Supabase authentication is not properly configured");
+          setLoading(false);
+          return;
         }
-      } catch (error: any) {
-        console.error("Error in auth setup:", error);
-        toast({
-          title: "Authentication Error",
-          description: "Authentication system unavailable. Please check your configuration.",
-          variant: "destructive",
-        });
+
+        const { data, error } = await supabase.auth.getSession();
+        
+        if (error) {
+          console.error("Error getting session:", error.message);
+        } else if (data?.session) {
+          setSession(data.session);
+          setUser(data.session.user);
+        }
+      } catch (error) {
+        console.error("Unexpected error during auth initialization:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    setData();
+    getInitialSession();
 
-    try {
-      const { data: { subscription } } = supabase.auth.onAuthStateChange(
-        (event, newSession) => {
-          console.log("Auth state changed:", event);
-          setSession(newSession);
-          setUser(newSession?.user ?? null);
-          setLoading(false);
-        }
-      );
-
-      return () => {
-        subscription.unsubscribe();
-      };
-    } catch (error: any) {
-      console.error("Error setting up auth state change listener:", error);
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, currentSession) => {
+      console.log("Auth state changed:", event);
+      setSession(currentSession);
+      setUser(currentSession?.user ?? null);
       setLoading(false);
-      return () => {};
-    }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   const signUp = async (email: string, password: string) => {
+    if (!isConfigured) {
+      toast({
+        title: "Authentication Not Configured",
+        description: "Supabase authentication is not configured. Please set up your environment variables.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     try {
-      const { error, data } = await supabase.auth.signUp({ 
+      const { error } = await supabase.auth.signUp({ 
         email, 
         password,
         options: {
@@ -84,44 +88,81 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       
       if (error) throw error;
       
-      if (data.user) {
-        console.log("Sign-up successful:", data.user);
-      }
+      toast({
+        title: "Account Created",
+        description: "Please check your email to confirm your account.",
+      });
     } catch (error: any) {
       console.error("Error signing up:", error.message);
+      toast({
+        title: "Sign Up Failed",
+        description: error.message,
+        variant: "destructive",
+      });
       throw error;
     }
   };
 
   const signIn = async (email: string, password: string) => {
+    if (!isConfigured) {
+      toast({
+        title: "Authentication Not Configured",
+        description: "Supabase authentication is not configured. Please set up your environment variables.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     try {
-      const { error, data } = await supabase.auth.signInWithPassword({ 
+      const { error } = await supabase.auth.signInWithPassword({ 
         email, 
         password 
       });
       
       if (error) throw error;
       
-      if (data.user) {
-        console.log("Sign-in successful:", data.user);
-      }
+      toast({
+        title: "Signed In",
+        description: "You have successfully logged in.",
+      });
     } catch (error: any) {
       console.error("Error signing in:", error.message);
+      toast({
+        title: "Sign In Failed",
+        description: error.message,
+        variant: "destructive",
+      });
       throw error;
     }
   };
 
   const signOut = async () => {
+    if (!isConfigured) return;
+    
     try {
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
     } catch (error: any) {
       console.error("Error signing out:", error.message);
+      toast({
+        title: "Sign Out Failed",
+        description: error.message,
+        variant: "destructive",
+      });
       throw error;
     }
   };
 
   const signInWithGoogle = async () => {
+    if (!isConfigured) {
+      toast({
+        title: "Authentication Not Configured",
+        description: "Supabase authentication is not configured. Please set up your environment variables.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
@@ -132,11 +173,25 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       if (error) throw error;
     } catch (error: any) {
       console.error("Error signing in with Google:", error.message);
+      toast({
+        title: "Sign In Failed",
+        description: error.message,
+        variant: "destructive",
+      });
       throw error;
     }
   };
 
   const signInWithTwitter = async () => {
+    if (!isConfigured) {
+      toast({
+        title: "Authentication Not Configured",
+        description: "Supabase authentication is not configured. Please set up your environment variables.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'twitter',
@@ -147,6 +202,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       if (error) throw error;
     } catch (error: any) {
       console.error("Error signing in with Twitter:", error.message);
+      toast({
+        title: "Sign In Failed",
+        description: error.message,
+        variant: "destructive",
+      });
       throw error;
     }
   };
@@ -155,6 +215,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     session,
     user,
     loading,
+    isConfigured,
     signIn,
     signUp,
     signOut,

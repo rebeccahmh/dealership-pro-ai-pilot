@@ -18,7 +18,7 @@ const AuthForm = ({ mode }: AuthFormProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { signIn, signUp, signInWithGoogle, signInWithTwitter } = useAuth();
+  const { signIn, signUp, signInWithGoogle, signInWithTwitter, isConfigured } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -29,24 +29,12 @@ const AuthForm = ({ mode }: AuthFormProps) => {
     try {
       if (mode === "login") {
         await signIn(email, password);
-        toast({
-          title: "Success",
-          description: "You have successfully logged in.",
-        });
       } else {
         await signUp(email, password);
-        toast({
-          title: "Success",
-          description: "Please check your email to confirm your account.",
-        });
       }
-      navigate("/"); // Redirect to home page after successful auth
+      // Navigation is handled by auth context and callbacks
     } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.message || "An error occurred during authentication.",
-        variant: "destructive",
-      });
+      // Error is already handled in the auth context
     } finally {
       setIsSubmitting(false);
     }
@@ -56,11 +44,7 @@ const AuthForm = ({ mode }: AuthFormProps) => {
     try {
       await signInWithGoogle();
     } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.message || "An error occurred during Google authentication.",
-        variant: "destructive",
-      });
+      // Error is already handled in the auth context
     }
   };
 
@@ -68,13 +52,37 @@ const AuthForm = ({ mode }: AuthFormProps) => {
     try {
       await signInWithTwitter();
     } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.message || "An error occurred during Twitter authentication.",
-        variant: "destructive",
-      });
+      // Error is already handled in the auth context
     }
   };
+
+  // Display a notice if Supabase is not configured
+  if (!isConfigured) {
+    return (
+      <Card className="w-full max-w-md mx-auto">
+        <CardHeader>
+          <CardTitle>{mode === "login" ? "Log In" : "Sign Up"}</CardTitle>
+          <CardDescription>
+            Authentication configuration required
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="bg-amber-50 border border-amber-200 text-amber-800 p-4 rounded-md">
+            <h3 className="text-lg font-medium">Supabase Not Configured</h3>
+            <p className="mt-1">
+              To enable authentication, you need to connect this project to Supabase and configure 
+              your environment variables.
+            </p>
+            <ol className="mt-3 list-decimal pl-5 space-y-1">
+              <li>Click the green Supabase button at the top of the interface</li>
+              <li>Connect to your Supabase project</li>
+              <li>Add the required environment variables (VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY)</li>
+            </ol>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="w-full max-w-md mx-auto">

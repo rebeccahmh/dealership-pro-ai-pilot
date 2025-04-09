@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "@/lib/supabase";
+import { supabase, isAuthConfigured } from "@/lib/supabase";
 import { useToast } from "@/hooks/use-toast";
 
 const AuthCallback = () => {
@@ -13,11 +13,18 @@ const AuthCallback = () => {
   useEffect(() => {
     const handleAuthCallback = async () => {
       try {
-        // Get the current session
-        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        if (!isAuthConfigured()) {
+          console.error("Supabase authentication is not configured");
+          setErrorMessage("Authentication system is not properly configured.");
+          setTimeout(() => navigate("/auth/login"), 2000);
+          return;
+        }
         
-        if (sessionError) {
-          console.error("Error getting session:", sessionError.message);
+        // Get the current session
+        const { data, error } = await supabase.auth.getSession();
+        
+        if (error) {
+          console.error("Error getting session:", error.message);
           setErrorMessage("Authentication error. Please try again.");
           toast({
             title: "Authentication Error",
@@ -28,7 +35,7 @@ const AuthCallback = () => {
           return;
         }
         
-        if (session) {
+        if (data.session) {
           console.log("Auth successful, user logged in");
           toast({
             title: "Authentication Successful",
@@ -51,23 +58,17 @@ const AuthCallback = () => {
 
     handleAuthCallback();
 
-    try {
-      // Set up auth state change listener
-      const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-        console.log("Auth event in callback:", event);
-        if (event === "SIGNED_IN" && session) {
-          navigate("/");
-        }
-      });
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log("Auth event in callback:", event);
+      if (event === "SIGNED_IN" && session) {
+        navigate("/");
+      }
+    });
 
-      return () => {
-        subscription.unsubscribe();
-      };
-    } catch (error: any) {
-      console.error("Error setting up auth state change listener:", error);
-      return () => {};
-    }
-  }, [navigate]);
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [navigate, toast]);
 
   return (
     <div className="h-screen flex items-center justify-center bg-gray-50">
