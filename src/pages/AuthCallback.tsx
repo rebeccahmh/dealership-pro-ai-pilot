@@ -2,32 +2,58 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
+import { useToast } from "@/hooks/use-toast";
 
 const AuthCallback = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   useEffect(() => {
-    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === "SIGNED_IN" && session) {
-        navigate("/");
-      }
-    });
-
-    // Handle the OAuth callback
     const handleAuthCallback = async () => {
-      const { error } = await supabase.auth.getSession();
-      if (error) {
+      try {
+        // Get the current session
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        
+        if (sessionError) {
+          console.error("Error getting session:", sessionError.message);
+          toast({
+            title: "Authentication Error",
+            description: "There was a problem completing the authentication process.",
+            variant: "destructive",
+          });
+          navigate("/auth/login");
+          return;
+        }
+        
+        if (session) {
+          console.log("Auth successful, user logged in");
+          toast({
+            title: "Authentication Successful",
+            description: "You have been successfully authenticated.",
+          });
+          navigate("/");
+        } else {
+          console.log("No session found after auth callback");
+          navigate("/auth/login");
+        }
+      } catch (error) {
         console.error("Error in auth callback:", error);
         navigate("/auth/login");
-      } else {
-        navigate("/");
       }
     };
 
     handleAuthCallback();
 
+    // Set up auth state change listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log("Auth event in callback:", event);
+      if (event === "SIGNED_IN" && session) {
+        navigate("/");
+      }
+    });
+
     return () => {
-      authListener.subscription.unsubscribe();
+      subscription.unsubscribe();
     };
   }, [navigate]);
 

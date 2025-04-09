@@ -2,6 +2,7 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { Session, User } from '@supabase/supabase-js';
 import { supabase } from "@/lib/supabase";
+import { useToast } from "@/hooks/use-toast";
 
 type AuthContextType = {
   session: Session | null;
@@ -20,22 +21,26 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const { toast } = useToast();
 
   useEffect(() => {
     const setData = async () => {
       try {
         const { data: { session }, error } = await supabase.auth.getSession();
         if (error) {
-          console.error("Error fetching session:", error);
-          setSession(null);
-          setUser(null);
+          console.error("Error fetching session:", error.message);
+          toast({
+            title: "Authentication Error",
+            description: "There was a problem connecting to the authentication service.",
+            variant: "destructive",
+          });
         } else {
           setSession(session);
           setUser(session?.user ?? null);
         }
-        setLoading(false);
       } catch (error) {
         console.error("Error in auth setup:", error);
+      } finally {
         setLoading(false);
       }
     };
@@ -43,9 +48,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setData();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
+      (event, newSession) => {
+        console.log("Auth state changed:", event);
+        setSession(newSession);
+        setUser(newSession?.user ?? null);
         setLoading(false);
       }
     );
@@ -57,26 +63,39 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const signUp = async (email: string, password: string) => {
     try {
-      const { error } = await supabase.auth.signUp({ 
+      const { error, data } = await supabase.auth.signUp({ 
         email, 
         password,
         options: {
           emailRedirectTo: `${window.location.origin}/auth/callback`,
         }
       });
+      
       if (error) throw error;
-    } catch (error) {
-      console.error("Error signing up:", error);
+      
+      if (data.user) {
+        console.log("Sign-up successful:", data.user);
+      }
+    } catch (error: any) {
+      console.error("Error signing up:", error.message);
       throw error;
     }
   };
 
   const signIn = async (email: string, password: string) => {
     try {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      const { error, data } = await supabase.auth.signInWithPassword({ 
+        email, 
+        password 
+      });
+      
       if (error) throw error;
-    } catch (error) {
-      console.error("Error signing in:", error);
+      
+      if (data.user) {
+        console.log("Sign-in successful:", data.user);
+      }
+    } catch (error: any) {
+      console.error("Error signing in:", error.message);
       throw error;
     }
   };
@@ -85,8 +104,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
-    } catch (error) {
-      console.error("Error signing out:", error);
+    } catch (error: any) {
+      console.error("Error signing out:", error.message);
       throw error;
     }
   };
@@ -100,8 +119,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         },
       });
       if (error) throw error;
-    } catch (error) {
-      console.error("Error signing in with Google:", error);
+    } catch (error: any) {
+      console.error("Error signing in with Google:", error.message);
       throw error;
     }
   };
@@ -115,8 +134,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         },
       });
       if (error) throw error;
-    } catch (error) {
-      console.error("Error signing in with Twitter:", error);
+    } catch (error: any) {
+      console.error("Error signing in with Twitter:", error.message);
       throw error;
     }
   };
