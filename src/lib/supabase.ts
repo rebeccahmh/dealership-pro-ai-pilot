@@ -8,12 +8,11 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 // Check if the required environment variables are available
 if (!supabaseUrl || !supabaseAnonKey) {
-  console.error("Supabase URL or anon key is missing. Make sure they are properly set in your environment variables.");
+  console.error("Supabase URL or anon key is missing. Please add them to your project settings.");
 }
 
-// Create a temporary client for development if no env variables are provided
-// In production, this should be properly configured
+// Create the Supabase client
 export const supabase = createClient(
-  supabaseUrl || 'https://placeholder-url.supabase.co',
-  supabaseAnonKey || 'placeholder-key'
+  supabaseUrl,
+  supabaseAnonKey
 );
