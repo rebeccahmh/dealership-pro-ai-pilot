@@ -38,8 +38,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           setSession(session);
           setUser(session?.user ?? null);
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error("Error in auth setup:", error);
+        toast({
+          title: "Authentication Error",
+          description: "Authentication system unavailable. Please check your configuration.",
+          variant: "destructive",
+        });
       } finally {
         setLoading(false);
       }
@@ -47,18 +52,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     setData();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, newSession) => {
-        console.log("Auth state changed:", event);
-        setSession(newSession);
-        setUser(newSession?.user ?? null);
-        setLoading(false);
-      }
-    );
+    try {
+      const { data: { subscription } } = supabase.auth.onAuthStateChange(
+        (event, newSession) => {
+          console.log("Auth state changed:", event);
+          setSession(newSession);
+          setUser(newSession?.user ?? null);
+          setLoading(false);
+        }
+      );
 
-    return () => {
-      subscription.unsubscribe();
-    };
+      return () => {
+        subscription.unsubscribe();
+      };
+    } catch (error: any) {
+      console.error("Error setting up auth state change listener:", error);
+      setLoading(false);
+      return () => {};
+    }
   }, []);
 
   const signUp = async (email: string, password: string) => {
