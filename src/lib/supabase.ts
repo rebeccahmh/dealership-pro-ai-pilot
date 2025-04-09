@@ -2,19 +2,13 @@
 import { createClient } from '@supabase/supabase-js';
 
 // Supabase client configuration
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://placeholder-url.supabase.co';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'placeholder-key';
+const supabaseUrl = "https://tdpxnhtaexnbbnrrnpuy.supabase.co";
+const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRkcHhuaHRhZXhuYmJucnJucHV5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQxNjIzNzAsImV4cCI6MjA1OTczODM3MH0.x5aHBAc27QI3a2aswXO0IvoYc03KkDSMd1u3z4UFYbI";
 
-// Check if we're using placeholders - for development/testing only
-if (supabaseUrl === 'https://placeholder-url.supabase.co' || supabaseAnonKey === 'placeholder-key') {
-  console.warn("Using placeholder Supabase credentials. Authentication features will be limited.");
-}
-
-// Create the Supabase client with proper error handling
+// Create the Supabase client
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 // Simple wrapper function to check if auth is properly configured
 export const isAuthConfigured = () => {
-  return !(supabaseUrl === 'https://placeholder-url.supabase.co' || 
-           supabaseAnonKey === 'placeholder-key');
+  return true; // Always configured since we're using hardcoded credentials
 };

@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Session, User } from '@supabase/supabase-js';
-import { supabase, isAuthConfigured } from "@/lib/supabase";
+import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { AuthContext } from "@/context/AuthContext";
 import { emailSignIn, emailSignUp, signOut as authSignOut, getSession } from "@/services/authService";
@@ -11,18 +11,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const { toast } = useToast();
-  const isConfigured = isAuthConfigured();
+  const isConfigured = true;
 
   useEffect(() => {
     const fetchInitialSession = async () => {
       try {
         setLoading(true);
-        
-        if (!isConfigured) {
-          console.log("Supabase authentication is not properly configured");
-          setLoading(false);
-          return;
-        }
 
         const { data, error } = await getSession();
         
@@ -41,7 +35,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     fetchInitialSession();
 
-    // This is kept in this file as it requires the supabase client
+    // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, currentSession) => {
       console.log("Auth state changed:", event);
       setSession(currentSession);
@@ -55,15 +49,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const signUp = async (email: string, password: string) => {
-    if (!isConfigured) {
-      toast({
-        title: "Authentication Not Configured",
-        description: "Supabase authentication is not configured. Please set up your environment variables.",
-        variant: "destructive",
-      });
-      return;
-    }
-
     try {
       const { error } = await emailSignUp(email, password, `${window.location.origin}/auth/callback`);
       
@@ -85,15 +70,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const signIn = async (email: string, password: string) => {
-    if (!isConfigured) {
-      toast({
-        title: "Authentication Not Configured",
-        description: "Supabase authentication is not configured. Please set up your environment variables.",
-        variant: "destructive",
-      });
-      return;
-    }
-
     try {
       const { error } = await emailSignIn(email, password);
       
@@ -115,8 +91,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const signOut = async () => {
-    if (!isConfigured) return;
-    
     try {
       const { error } = await authSignOut();
       if (error) throw error;

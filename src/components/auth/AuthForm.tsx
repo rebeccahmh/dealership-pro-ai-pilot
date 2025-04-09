@@ -1,7 +1,7 @@
 
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -38,34 +38,6 @@ const AuthForm = ({ mode }: AuthFormProps) => {
       setIsSubmitting(false);
     }
   };
-
-  // Display a notice if Supabase is not configured
-  if (!isConfigured) {
-    return (
-      <Card className="w-full max-w-md mx-auto">
-        <CardHeader>
-          <CardTitle>{mode === "login" ? "Log In" : "Sign Up"}</CardTitle>
-          <CardDescription>
-            Authentication configuration required
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="bg-amber-50 border border-amber-200 text-amber-800 p-4 rounded-md">
-            <h3 className="text-lg font-medium">Supabase Not Configured</h3>
-            <p className="mt-1">
-              To enable authentication, you need to connect this project to Supabase and configure 
-              your environment variables.
-            </p>
-            <ol className="mt-3 list-decimal pl-5 space-y-1">
-              <li>Click the green Supabase button at the top of the interface</li>
-              <li>Connect to your Supabase project</li>
-              <li>Add the required environment variables (VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY)</li>
-            </ol>
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
 
   return (
     <Card className="w-full max-w-md mx-auto">

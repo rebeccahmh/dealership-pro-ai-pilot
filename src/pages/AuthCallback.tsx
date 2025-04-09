@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase, isAuthConfigured } from "@/lib/supabase";
+import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
 const AuthCallback = () => {
@@ -13,13 +13,6 @@ const AuthCallback = () => {
   useEffect(() => {
     const handleAuthCallback = async () => {
       try {
-        if (!isAuthConfigured()) {
-          console.error("Supabase authentication is not configured");
-          setErrorMessage("Authentication system is not properly configured.");
-          setTimeout(() => navigate("/auth/login"), 2000);
-          return;
-        }
-        
         // Get the current session
         const { data, error } = await supabase.auth.getSession();
         
