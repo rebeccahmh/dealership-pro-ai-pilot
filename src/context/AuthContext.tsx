@@ -12,8 +12,6 @@ type AuthContextType = {
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
-  signInWithGoogle: () => Promise<void>;
-  signInWithTwitter: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -153,64 +151,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const signInWithGoogle = async () => {
-    if (!isConfigured) {
-      toast({
-        title: "Authentication Not Configured",
-        description: "Supabase authentication is not configured. Please set up your environment variables.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-        },
-      });
-      if (error) throw error;
-    } catch (error: any) {
-      console.error("Error signing in with Google:", error.message);
-      toast({
-        title: "Sign In Failed",
-        description: error.message,
-        variant: "destructive",
-      });
-      throw error;
-    }
-  };
-
-  const signInWithTwitter = async () => {
-    if (!isConfigured) {
-      toast({
-        title: "Authentication Not Configured",
-        description: "Supabase authentication is not configured. Please set up your environment variables.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'twitter',
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-        },
-      });
-      if (error) throw error;
-    } catch (error: any) {
-      console.error("Error signing in with Twitter:", error.message);
-      toast({
-        title: "Sign In Failed",
-        description: error.message,
-        variant: "destructive",
-      });
-      throw error;
-    }
-  };
-
   const value = {
     session,
     user,
@@ -219,8 +159,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     signIn,
     signUp,
     signOut,
-    signInWithGoogle,
-    signInWithTwitter,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
