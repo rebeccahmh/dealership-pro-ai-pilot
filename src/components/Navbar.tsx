@@ -1,4 +1,3 @@
-
 import { Bell, Search, Settings, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -51,11 +50,9 @@ const Navbar = () => {
     }
   };
 
-  // Get user initials for avatar fallback
   const getUserInitials = () => {
     if (!user || !user.email) return "?";
     
-    // Use the first letter of the email
     return user.email.charAt(0).toUpperCase();
   };
   
